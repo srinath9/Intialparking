@@ -11,17 +11,17 @@ public class CarObject implements Runnable{
     private float battery;
     private boolean active;
     public String type;
+    public Float addBattery;
 
 
-    public CarObject(String name, float batterylife, String cartype){
+    public CarObject(String name, float batterylife, String cartype, float addBattery){
         this.carName = name;
-        this.battery = batterylife;
-        this.type = cartype;
 
+        this.type = cartype;
+        this.addBattery = addBattery;
+        this.battery = batterylife + addBattery;
 
     }
-
-
 
     public void setactivity(){
         if (type=="Distributor") active = true;
@@ -29,7 +29,6 @@ public class CarObject implements Runnable{
 
     public void run(){
         System.out.println("running "+ this.carName);
-
     }
 
     public float batteryLife(){
@@ -45,8 +44,18 @@ public class CarObject implements Runnable{
     }
 
 
+    public Float dischargeBatteryLife(float batteryLife){ return  (  this.battery>batteryLife  ? this.battery-batteryLife : null); }
+
+    public Float addBatteryLife(float batteryLife){return (  batteryLife >0  ? this.battery+batteryLife : null);}
+
+
+
     public String typeSell(){
         return this.type;
+    }
+
+    public void myData(){
+        System.out.println("carname "+this.carName+ " \nbatterylife "+this.battery+" \ntype of selling "+this.type);
     }
 
 

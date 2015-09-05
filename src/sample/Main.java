@@ -48,7 +48,7 @@ public class Main extends Application {
         button.setOnAction(e->{
 
              /*carResult =*/
-            Confirm.display("cnonfirmatiuon","confirm it",car);
+            Confirm.display("Battery Energy","Add the Detials",car);
             /*System.out.print(carResult);*/
 
         });

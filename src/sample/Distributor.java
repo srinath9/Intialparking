@@ -16,8 +16,9 @@ import java.util.Objects;
  * Created by srinath on 9/4/2015.
  */
 public class Distributor {
+    static private String resultValue;
 
-    public static void display(String title, String message,int i, CarObject... car ){
+    public static String display(String title, String message, int i, CarObject... car){
         Stage window = new Stage();
         Button closeButton = new Button("close the widow");
 
@@ -46,18 +47,20 @@ public class Distributor {
 
         comboBox = new ComboBox<String>();
         comboBox.getItems().addAll(
-                objecttoString(i, car));
+                objecttoString( car));
         /*comboBox.setPromptText("What is your Type you want?");*/
 
 
 
 
-        Button yes = new Button("Yes");
+        Button yes = new Button("Add Battery Life");
+        final String[] userName = {new String()};
 
         yes.setOnAction(
                 e -> {
-                    String userName = comboBox.getValue();
-                    CarObject carObject =  searchName(userName,car);
+                    userName[0] = comboBox.getValue();
+                    CarObject carObject =  searchName(userName[0],car);
+                    changeValue(userName[0]);
                     System.out.println("the customer is  "+carObject.customerName());
                     
                     window.close();
@@ -72,17 +75,21 @@ public class Distributor {
         layout.getChildren().addAll( typelabel, comboBox, yes);
         layout.setAlignment(Pos.CENTER);
 
-
-
         Scene scene = new Scene(layout);
-        window.setTitle("new title");
+        window.setTitle("Adding from distributor");
         window.setScene(scene);
+
+        System.out.println("before closing " + resultValue);
         window.showAndWait();
+
+        return resultValue;
+
+
 
     }
 
-    private static String[] objecttoString( int num, CarObject... args){
-        String[] values = new String[num];
+    private static String[] objecttoString( CarObject... args){
+        String[] values = new String[10];
         int i =0;
         for (CarObject value : args){
             /*for (i; i<num; i++){*/
@@ -91,8 +98,8 @@ public class Distributor {
                 if ((Objects.equals(value.typeSell(), "Distributor"))) {
 
 
-                    System.out.println(value.typeSell());
-                    System.out.println(value.customerName());
+                    System.out.println("type of selling process : "+value.typeSell() + " custoimer to " + value.customerName());
+
                     values[i] = value.customerName();
                     i++;
 
@@ -100,26 +107,37 @@ public class Distributor {
             }
         }
 
-        return values;
+        String[] result = new String[i];
+
+        for (int init = 0; init < i; init++){
+            result[init] =values[init];
+        }
+
+        return result;
     }
 
     public static <T> String val(T message){
         return ""+message;
     }
 
-    private static CarObject searchName(String searchName, CarObject... args ){
+    public static CarObject searchName(String searchName, CarObject... args){
         int i=0;
         CarObject str = null;
         for (CarObject value : args){
             i++;
             /*for (i; i<num; i++){*/
             if (value.customerName() == searchName) {
-                System.out.println(value.customerName());
+                System.out.println("searching name  "+value.customerName());
                 return value;
             }
         }
 
         return str;
+    }
+
+    private static void changeValue(String result){
+        resultValue = result;
+
     }
 
 }
