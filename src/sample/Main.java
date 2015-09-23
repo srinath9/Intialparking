@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -16,6 +17,8 @@ import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
+import java.sql.Timestamp;
+
 
 public class Main extends Application {
     static float battery_left = 1000;
@@ -26,7 +29,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        CarObject[] car = new CarObject[10];
+        CarObject[] carList = new CarObject[100];
+
 
         window  = primaryStage;
         Label label1 = new Label("welcome ");
@@ -43,17 +47,30 @@ public class Main extends Application {
         scene1 = new Scene(layout1,500,600);
 
         Button button = new Button("Add new car");
+        Button rangenButton = new Button("Generate random 100 cars list");
         int i=0;
+
 
         button.setOnAction(e->{
 
              /*carResult =*/
-            Confirm.display("Battery Energy","Add the Detials",car);
+            NewCar.display("Battery Energy","Add the Detials",carList[0]);
             /*System.out.print(carResult);*/
 
         });
 
-        layout1.getChildren().addAll(label1, button1,button);
+
+
+        rangenButton.setOnAction(e -> {
+            CarObject[] randomCars = RandomGeneration.display();
+            System.out.println("array" );
+
+
+
+        });
+        layout1.setAlignment(Pos.CENTER);
+
+        layout1.getChildren().addAll( button,rangenButton);
 
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);
