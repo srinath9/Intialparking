@@ -70,7 +70,7 @@ public class RandomClass {
 
         while ((float) randomInt < n*10){
             randomInt = randomGenerator.nextInt(1000);
-            System.out.println("next int value : "+ randomInt);
+        //    System.out.println("next int value : "+ randomInt);
         }
 
         randomInt =randomInt/100;

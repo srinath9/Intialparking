@@ -2,6 +2,7 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -20,7 +22,8 @@ import java.util.Random;
  */
 public class RandomGeneration {
     static private String resultValue;
-
+    static TableView<CarObject> table;
+    TextField nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime;
 
 
     public static CarObject[] display() {
@@ -77,18 +80,15 @@ public class RandomGeneration {
             long unixtime2=(long) (1293861599+r2.nextDouble()*60*60*24*365);
             Date d2 = new Date(unixtime2);
 
-
-           // System.out.println("date and time " +d1 + " : " + unixtime);
-
-            carList[j].setEntryTime(d1);
-            carList[j].setExistTime(d2);
-
-         //   carList[j].setEntryTime((int) entry);
-          // carList[j].setExistTime((int) end);
+            Calendar calendar = Calendar.getInstance();
+            java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
+            java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
 
 
+            carList[j].setEntryTime(t1);
+            carList[j].setExistTime(t2);
 
-            //carList[j].myData();
+
 
         }
 
@@ -103,7 +103,7 @@ public class RandomGeneration {
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         TableColumn<CarObject, Float> priceMin = new TableColumn<>("Min Price");
-        priceMin.setMinWidth(200);
+        priceMin.setMinWidth(100);
         priceMin.setCellValueFactory(new PropertyValueFactory<>("minPrice"));
 
         //Price column
@@ -117,10 +117,29 @@ public class RandomGeneration {
 
         //Price column
         TableColumn<CarObject, Date> existTime = new TableColumn<>("Exist Time");
-        existTime.setMinWidth(100);
+        existTime.setMinWidth(200);
         existTime.setCellValueFactory(new PropertyValueFactory<>("estimatedOutTime"));
 
-        TableView<CarObject> table;
+
+
+
+        Button yes = new Button("Sell ");
+        Button no = new Button("Dont sell");
+
+        no.setOnAction(e -> window.close());
+
+
+
+
+        Button addButton = new Button("Add");
+        //addButton.setOnAction(e -> addButtonClicked());
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e -> deleteButtonClicked());
+
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(10,10,10,10));
+        hBox.setSpacing(10);
+        //hBox.getChildren().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime, addButton, deleteButton);
 
         table = new TableView<>();
         table.setItems(getProduct(carList));
@@ -137,24 +156,6 @@ public class RandomGeneration {
 
 
 
-
-
-
-
-        Button yes = new Button("Sell ");
-        Button no = new Button("Dont sell");
-
-        no.setOnAction(e -> window.close());
-
-
-        yes.setOnAction(
-                e -> {
-/*
-                    car.selling(sellvalue);
-                    car.getPrice();
-                    window.close();*/
-                }
-        );
 
 
         Label label1 = new Label();
@@ -191,11 +192,32 @@ public class RandomGeneration {
 
     }
 
+    public static void deleteButtonClicked(){
+        ObservableList<CarObject> productSelected, allProducts;
+        allProducts = table.getItems();
+        productSelected = table.getSelectionModel().getSelectedItems();
+
+        productSelected.forEach(allProducts::remove);
+    }
+/*
+
+    public void addButtonClicked(){
+        CarObject product = new CarObject();
+        product.setName(nameInput.getText());
+        product.setPrice(Double.parseDouble(priceInput.getText()));
+        product.setQuantity(Integer.parseInt(quantityInput.getText()));
+        table.getItems().add(product);
+        nameInput.clear();
+        priceInput.clear();
+        quantityInput.clear();
+    }
+*/
+
 
     public static ObservableList<CarObject> getProduct(CarObject[] carList){
         ObservableList<CarObject> products = FXCollections.observableArrayList();
 
-        for(int i =0; i<100; i++){
+        for(int i =0; i<10; i++){
             products.add(carList[i]);
         }
 

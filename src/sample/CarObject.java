@@ -1,5 +1,6 @@
 package sample;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -14,19 +15,22 @@ public class CarObject implements Runnable{
     private boolean active;
     public String type;
     public Float addBattery;
-   // private float price = (float) 0.0;
+    // private float price = (float) 0.0;
     private Float minPrice = (float) 0.0;
     private Float maxPrice = (float) 0.0;
-    private Date entryTime;
-    private Date estimatedOutTime;
+    private Float minBattery = (float) 20.0;
+    private Float maxBattery = (float) 80.0;
+    private Timestamp entryTime;
+    private Timestamp estimatedOutTime;
 
 
     public CarObject(String name, float batterylife, String cartype, float addBattery){
         this.carName = name;
         this.type = cartype;
         this.addBattery = addBattery;
+        this.minBattery= (float)20.0;
         this.battery = batterylife + addBattery;
-       // this.price = (float) 0.0;
+        // this.price = (float) 0.0;
         this.minPrice = (float) 0.0;
         this.maxPrice = (float) 0.0;
         this.estimatedOutTime = null;
@@ -38,26 +42,50 @@ public class CarObject implements Runnable{
         this.type = cartype;
         this.addBattery = addBattery;
         this.battery = batterylife + addBattery;
-      //  this.price = (float) 0.0;
+        //  this.price = (float) 0.0;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.estimatedOutTime = null;
         this.entryTime = null;
+        this.minBattery= (float)20.0;
 
     }
 
-    public CarObject(String name, float batterylife, String cartype, float addBattery, float minPrice, float maxPrice, Date entryTime, Date existTime) {
+    public CarObject(String name, float batterylife, String cartype, float addBattery, float minPrice, float maxPrice, Timestamp entryTime, Timestamp existTime) {
         this.carName = name;
         this.type = cartype;
         this.addBattery = addBattery;
-        this.battery = batterylife + addBattery;
-       // this.price = (float) 0.0;
+        this.battery = batterylife;
+        // this.price = (float) 0.0;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
         this.estimatedOutTime = existTime;
         this.entryTime = entryTime;
+        this.minBattery= (float)20.0;
+        this.maxBattery = (float) 80.0;
 
     }
+
+
+    public CarObject(String name, float batterylife, String cartype, float minPrice, float maxPrice, Timestamp entryTime, Timestamp existTime, float minBattery,float maxBattery,float addBattery) {
+
+
+        this.carName = name;
+        this.type = cartype;
+        this.addBattery = addBattery;
+        this.battery = batterylife;
+        // this.price = (float) 0.0;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.estimatedOutTime = existTime;
+        this.entryTime = entryTime;
+        this.minBattery= minBattery;
+        this.maxBattery = maxBattery;
+
+    }
+
+
+    public void setAddBattery(){this.battery += this.addBattery;}
 
     public void setactivity(){      if (type=="Distributor") active = true;    }
 
@@ -77,13 +105,18 @@ public class CarObject implements Runnable{
 
     public Float addBatteryLife(float batteryLife){return (  batteryLife >0  ? this.battery+batteryLife : null);}
 
+    public Float getMinBattery(){return this.minBattery;}
+    public void setMinBattery(float n){this.minBattery = n;}
 
-   /* public void selling(float n){
-        this.price += n;
-        return ;
-    }
-    public void getPrice(){ System.out.println("your price is : "+this.price);}
-*/
+    public Float getMaxBattery(){return this.maxBattery;}
+    public void setMaxBattery(float n){this.maxBattery = n;}
+
+    /* public void selling(float n){
+         this.price += n;
+         return ;
+     }
+     public void getPrice(){ System.out.println("your price is : "+this.price);}
+ */
     public String typeSell(){ return this.type;    }
 
     public void myData(){ System.out.println("carname "+this.carName+ " \tbatterylife "+this.battery+" \ttype of selling "+this.type+ "\tmin price : "+ this.minPrice+
@@ -98,9 +131,11 @@ public class CarObject implements Runnable{
     public void printExistTime(){System.out.println("Estimated outgoing time is : "+estimatedOutTime );}
     public Date getEntryTime(){return this.entryTime;}
     public Date getEstimatedOutTime(){return this.estimatedOutTime;}
-    public void setEntryTime(Date n){this.entryTime = n;}
-    public void setExistTime(Date n){this.estimatedOutTime =n;}
+    public void setEntryTime(Timestamp n){this.entryTime = n;}
+    public void setExistTime(Timestamp n){this.estimatedOutTime =n;}
 
+
+    public float getBattery(){return this.battery;}
 
 
 

@@ -10,11 +10,16 @@ import javafx.scene.control.*;
 import javafx.beans.property.*;
 import javafx.util.*;
 import java.lang.String;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
 import javafx.util.*;
+
+import static java.sql.DriverManager.getConnection;
+import java.sql.ResultSet;
+
 /**
  * Created by srinath on 8/28/2015.
  */
@@ -82,10 +87,16 @@ public class NewCar/*extends StringConverter<String>*/  {
         /*comboBox.setPromptText("What is your Type you want?");*/
 
        /* comboBox.setOnAction(e -> System.out.print(comboBox.getValue()));*/
-        Button yes = new Button("Add the battery life");
+        Button yes = new Button("Go to add price preference");
+        Button close = new Button("Close");
+        close.setOnAction(e-> window.close());
         /*Button no = new Button("NO");*/
 
         yes.setOnAction(e -> {
+
+
+
+
 //            int index = i;
  //           incVal();
 
@@ -97,25 +108,33 @@ public class NewCar/*extends StringConverter<String>*/  {
                 System.out.println(carname.getText() + " " + batterylife.getText() + " Buyer" + " add battery " + batterylife.getText());
                 final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
 
-           //     System.out.println("into distribution ");
-                long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
-                long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
-                long diff = end - offset + 1;
-                Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
 
-                Random r =new Random();
+
+                /*if (conn != null) {
+                    System.out.println("You made it, take control your database now!");
+                } else {
+                    System.out.println("Failed to make connection!");
+                }
+*/
+
+           //     System.out.println("into distribution ");
+
+
+                /*Random r =new Random();
                 long unixtime=(long) (1293861599+r.nextDouble()*60*60*24*365);
                 Date d1 = new Date(unixtime);
 
                 Random r2 =new Random();
                 long unixtime2=(long) (1293861599+r2.nextDouble()*60*60*24*365);
-                Date d2 = new Date(unixtime2);
+                Date d2 = new Date(unixtime2);*/
+
+                Calendar calendar = Calendar.getInstance();
+                java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
+                java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
 
 
-                //System.out.println("date and time " +d1 + " : " + unixtime);
-
-                car.setEntryTime(d1);
-                car.setExistTime( d2);
+                car.setEntryTime(t1);
+                car.setExistTime(t2);
 
              //   System.out.println(offset+"\n"+end+"\n"+diff+"\n"+rand);
 
@@ -125,10 +144,43 @@ public class NewCar/*extends StringConverter<String>*/  {
                 //resultCarDetails =  Distributor.searchName(result, car);
 
                 car.addBatteryLife(Float.parseFloat(val(addBattery.getText())));
+                try
+                {
+                    // loads com.mysql.jdbc.Driver into memory
+                    Class.forName("com.mysql.jdbc.Driver");
+                }
+                catch (ClassNotFoundException cnf)
+                {
+                    System.out.println("Driver could not be loaded: " + cnf);
+                }
 
-                car.myData();
+                Connection conn = null;
+                try {
+                    // System.out.println("try to connect");
+                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car","root", "");
+                    Statement stmt = conn.createStatement();
+                    //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
+                    String sql = "INSERT INTO `cardetails` (carType,carName,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryLeveltoAdd) "
+                            + "VALUES ('"+car.getType()+"','"+car.getCarName()+"',"+car.getMinPrice()+","+car.getMaxPrice()+",'" + car.getEntryTime()+"','"
+                            +car.getEstimatedOutTime()+"',"+car.getMinBattery()+","+car.getMaxBattery()+","+car.getBattery()+")";
 
+                    try
+                    {
+                       // ResultSet rs = stmt.executeQuery(sql);
+                        stmt.executeUpdate(sql);
+                    }
+                    catch (SQLException sqle)
+                    {
+                        System.out.println("SQL Exception thrown: " + sqle);
+                    }
 
+                } catch (SQLException re) {
+                   // System.out.println("failed to connect");
+                     re.printStackTrace();
+                }
+
+               // car.myData();
+                window.close();
 
 
             }
@@ -141,8 +193,10 @@ public class NewCar/*extends StringConverter<String>*/  {
                 final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
 
             }
-            window.close();
+
         });
+
+
 
         Label label1 = new Label();
         label1.setText(message);
@@ -171,7 +225,7 @@ public class NewCar/*extends StringConverter<String>*/  {
         carname.setMaxWidth(100);
         batterylife.setMaxWidth(100);
         addBattery.setMaxWidth(100);
-        layout.getChildren().addAll(label1, hb1, typelabel, hb,yes);
+        layout.getChildren().addAll(label1, hb1, typelabel, hb,yes,close);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);

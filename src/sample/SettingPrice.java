@@ -83,7 +83,9 @@ public class SettingPrice {
                     car.setMaxPrice(Float.parseFloat(val(maxPrice.getText())));
 
 
-                    System.out.println("min price "+car.getMinPrice() + " max price" + car.getMaxPrice());
+                    System.out.println("min price " + car.getMinPrice() + " max price" + car.getMaxPrice());
+
+                    UserInfo.display(car);
 
                     
                     window.close();
