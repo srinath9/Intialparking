@@ -23,6 +23,7 @@ public class ShowDetails {
     private static int i=0;
     static String result;
     static CarObject resultCarDetails;
+    private static TableView<CarObject> table;
 
 
     public static void display(/*String title, String message, CarObject car1*/){
@@ -99,7 +100,7 @@ public class ShowDetails {
 
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car", "root", "");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_cars", "root", "srinath");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -118,7 +119,7 @@ public class ShowDetails {
         try {
             ResultSet rs = st.executeQuery(query);
             System.out.println(rs);
-            CarObject[] savesList = new CarObject[10];
+            CarObject[] savesList = new CarObject[100];
             int i =0;
             while (rs.next())
             {
@@ -140,12 +141,23 @@ public class ShowDetails {
                /* System.out.format("%s, %s, %s, %s, %s %s %s %s\n", id, firstName, lastName, *//*entryTime, existTime,*//* minPrice,batteryMax, batteryAdd, minPrice);*/
                 System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, batteryMax, batteryAdd,existTime , entryTime);
                 savesList[i] = new CarObject(carName,(float)10.0,carType,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryAdd);
+                i=i+1;
 
             }
+          //  System.out.println("carlist lenth : "+i);
+
+            table = RandomGeneration.tableDisplay(savesList);
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(table);
+
+        Scene scene = new Scene(vBox);
+        window.setScene(scene);
+        window.show();
 
 
         yes.setOnAction(e -> {
@@ -196,9 +208,9 @@ public class ShowDetails {
         //layout.getChildren().addAll(label1, hb1, typelabel, hb,yes,close);
         layout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout);
-        window.setTitle("new title");
-        window.setScene(scene);
+     //   Scene scene = new Scene(layout);
+     //   window.setTitle("new title");
+     //   window.setScene(scene);
     //    window.showAndWait();
 
         /*return car;*/

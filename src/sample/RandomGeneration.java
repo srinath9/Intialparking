@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import javafx.scene.control.TextField;
 
 /**
  * Created by srinath on 9/21/2015.
@@ -24,6 +25,11 @@ public class RandomGeneration {
     static private String resultValue;
     static TableView<CarObject> table;
     TextField nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime;
+    static TextField carNameInput, minPriceInput, maxPriceInput;
+
+
+
+
 
 
     public static CarObject[] display() {
@@ -93,34 +99,6 @@ public class RandomGeneration {
         }
 
 
-        TableColumn<CarObject, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setMinWidth(200);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("carName"));
-
-        //Price column
-        TableColumn<CarObject, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setMinWidth(100);
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        TableColumn<CarObject, Float> priceMin = new TableColumn<>("Min Price");
-        priceMin.setMinWidth(100);
-        priceMin.setCellValueFactory(new PropertyValueFactory<>("minPrice"));
-
-        //Price column
-        TableColumn<CarObject, Float> priceMaxColumn = new TableColumn<>("Max Price");
-        priceMaxColumn.setMinWidth(100);
-        priceMaxColumn.setCellValueFactory(new PropertyValueFactory<>("maxPrice"));
-
-        TableColumn<CarObject, Date> timeEntry = new TableColumn<>("Entry Time");
-        timeEntry.setMinWidth(200);
-        timeEntry.setCellValueFactory(new PropertyValueFactory<>("entryTime"));
-
-        //Price column
-        TableColumn<CarObject, Date> existTime = new TableColumn<>("Exist Time");
-        existTime.setMinWidth(200);
-        existTime.setCellValueFactory(new PropertyValueFactory<>("estimatedOutTime"));
-
-
 
 
         Button yes = new Button("Sell ");
@@ -131,22 +109,53 @@ public class RandomGeneration {
 
 
 
-        Button addButton = new Button("Add");
-        //addButton.setOnAction(e -> addButtonClicked());
-        Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e -> deleteButtonClicked());
 
         HBox hBox = new HBox();
-        hBox.setPadding(new Insets(10,10,10,10));
+        hBox.setPadding(new Insets(10, 10, 10, 10));
         hBox.setSpacing(10);
         //hBox.getChildren().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime, addButton, deleteButton);
 
         table = new TableView<>();
-        table.setItems(getProduct(carList));
-        table.getColumns().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime);
+        table = tableDisplay(carList);
+
+
+        TextField carNameInput = new TextField();
+        carNameInput.setPromptText("Name");
+        carNameInput.setMinWidth(100);
+
+        //Price input
+        TextField minPriceInput = new TextField();
+        minPriceInput.setPromptText("min Price");
+
+        //Quantity input
+        TextField maxPriceInput = new TextField();
+        maxPriceInput.setPromptText("Max Price");
+
+
+
+        //Button
+        Button addButton = new Button("Add");
+        addButton.setOnAction(e -> {
+            System.out.println();
+
+            addButtonClicked(carNameInput.getText(),Float.parseFloat(minPriceInput.getText()),Float.parseFloat(maxPriceInput.getText()));
+        });
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e -> deleteButtonClicked());
+
+        HBox hBox1 = new HBox();
+        hBox1.setPadding(new Insets(10,10,10,10));
+        hBox1.setSpacing(10);
+        hBox1.getChildren().addAll(carNameInput, minPriceInput, maxPriceInput, addButton, deleteButton);
+
+
+
+
+
+
 
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(table);
+        vBox.getChildren().addAll(table, hBox1);
 
         Scene scene = new Scene(vBox);
         window.setScene(scene);
@@ -192,6 +201,63 @@ public class RandomGeneration {
 
     }
 
+    public static TableView<CarObject> tableDisplay(CarObject[] carList){
+
+
+        TableColumn<CarObject, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setMinWidth(200);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("carName"));
+
+        //Price column
+        TableColumn<CarObject, String> typeColumn = new TableColumn<>("Type");
+        typeColumn.setMinWidth(100);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        TableColumn<CarObject, Float> priceMin = new TableColumn<>("Min Price");
+        priceMin.setMinWidth(100);
+        priceMin.setCellValueFactory(new PropertyValueFactory<>("minPrice"));
+
+        //Price column
+        TableColumn<CarObject, Float> priceMaxColumn = new TableColumn<>("Max Price");
+        priceMaxColumn.setMinWidth(100);
+        priceMaxColumn.setCellValueFactory(new PropertyValueFactory<>("maxPrice"));
+
+        TableColumn<CarObject, Date> timeEntry = new TableColumn<>("Entry Time");
+        timeEntry.setMinWidth(200);
+        timeEntry.setCellValueFactory(new PropertyValueFactory<>("entryTime"));
+
+        //Price column
+        TableColumn<CarObject, Date> existTime = new TableColumn<>("Exist Time");
+        existTime.setMinWidth(200);
+        existTime.setCellValueFactory(new PropertyValueFactory<>("estimatedOutTime"));
+
+
+
+        table = new TableView<>();
+        table.setItems(getProduct(carList));
+        table.getColumns().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime);
+
+
+
+        return table;
+
+
+
+    }
+
+    public static void addButtonClicked(String carName, Float minPrice, Float maxPrice){
+        CarObject product = new CarObject();
+      //  System.out.println(carNameInput.getText());
+        product.setCarName(carName);
+        //Float.parseFloat(minPriceInput.getText()
+        product.setMinPrice(minPrice);
+        product.setMaxPrice(maxPrice);
+        table.getItems().add(product);
+        /*carNameInput.clear();
+        minPriceInput.clear();
+        maxPriceInput.clear();*/
+    }
+
     public static void deleteButtonClicked(){
         ObservableList<CarObject> productSelected, allProducts;
         allProducts = table.getItems();
@@ -216,9 +282,12 @@ public class RandomGeneration {
 
     public static ObservableList<CarObject> getProduct(CarObject[] carList){
         ObservableList<CarObject> products = FXCollections.observableArrayList();
+        int i;
+     //  System.out.println("carlist lenth : "+carList.length);
+        for(i =0; carList[i]!=null; i++){
 
-        for(int i =0; i<10; i++){
             products.add(carList[i]);
+        //    System.out.println(carList[i].getCarName());
         }
 
         return products;

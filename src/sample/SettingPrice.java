@@ -85,7 +85,7 @@ public class SettingPrice {
 
                     System.out.println("min price " + car.getMinPrice() + " max price" + car.getMaxPrice());
 
-                    UserInfo.display(car);
+                    UserInfo.savedDeatials(car);
 
                     
                     window.close();

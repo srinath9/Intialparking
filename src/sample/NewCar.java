@@ -59,7 +59,7 @@ public class NewCar/*extends StringConverter<String>*/  {
         Label addBatteryLabel = new Label();
         Label typelabel = new Label();
         carlabel.setText("give the name");
-        batterylabel.setText("integer battery level");
+        batterylabel.setText("minimum battery level");
         addBatteryLabel.setText("required ammount of battery");
 
 
@@ -105,29 +105,14 @@ public class NewCar/*extends StringConverter<String>*/  {
             answer = true;
             
             if(rb3.isSelected()){
-                System.out.println(carname.getText() + " " + batterylife.getText() + " Buyer" + " add battery " + batterylife.getText());
-                final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
+                System.out.println(carname.getText() + " " + batterylife.getText() + " Both" + " add battery " + batterylife.getText());
+                final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Both",Float.parseFloat(val(addBattery.getText())));
+                car.setMinBattery(Float.parseFloat(val(batterylife.getText())));
+                car.setMaxBattery(Float.parseFloat(val(addBattery.getText())));
 
 
-
-                /*if (conn != null) {
-                    System.out.println("You made it, take control your database now!");
-                } else {
-                    System.out.println("Failed to make connection!");
-                }
-*/
-
-           //     System.out.println("into distribution ");
-
-
-                /*Random r =new Random();
-                long unixtime=(long) (1293861599+r.nextDouble()*60*60*24*365);
-                Date d1 = new Date(unixtime);
-
-                Random r2 =new Random();
-                long unixtime2=(long) (1293861599+r2.nextDouble()*60*60*24*365);
-                Date d2 = new Date(unixtime2);*/
-
+                System.out.format("system details      %s, %s, %s  , %s %s\n", car.getCarName(), car.getType(), car.getMinBattery(), car.getMaxBattery(), car.getMinBattery());
+                System.out.println("car min value : "+car.getMinPrice());
                 Calendar calendar = Calendar.getInstance();
                 java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
                 java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
@@ -144,40 +129,6 @@ public class NewCar/*extends StringConverter<String>*/  {
                 //resultCarDetails =  Distributor.searchName(result, car);
 
                 car.addBatteryLife(Float.parseFloat(val(addBattery.getText())));
-                try
-                {
-                    // loads com.mysql.jdbc.Driver into memory
-                    Class.forName("com.mysql.jdbc.Driver");
-                }
-                catch (ClassNotFoundException cnf)
-                {
-                    System.out.println("Driver could not be loaded: " + cnf);
-                }
-
-                Connection conn = null;
-                try {
-                    // System.out.println("try to connect");
-                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car","root", "");
-                    Statement stmt = conn.createStatement();
-                    //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
-                    String sql = "INSERT INTO `cardetails` (carType,carName,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryLeveltoAdd) "
-                            + "VALUES ('"+car.getType()+"','"+car.getCarName()+"',"+car.getMinPrice()+","+car.getMaxPrice()+",'" + car.getEntryTime()+"','"
-                            +car.getEstimatedOutTime()+"',"+car.getMinBattery()+","+car.getMaxBattery()+","+car.getBattery()+")";
-
-                    try
-                    {
-                       // ResultSet rs = stmt.executeQuery(sql);
-                        stmt.executeUpdate(sql);
-                    }
-                    catch (SQLException sqle)
-                    {
-                        System.out.println("SQL Exception thrown: " + sqle);
-                    }
-
-                } catch (SQLException re) {
-                   // System.out.println("failed to connect");
-                     re.printStackTrace();
-                }
 
                // car.myData();
                 window.close();

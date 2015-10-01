@@ -23,6 +23,20 @@ public class CarObject implements Runnable{
     private Timestamp entryTime;
     private Timestamp estimatedOutTime;
 
+    public CarObject(){
+        this.carName = "name";
+        this.type = "cartype";
+        this.addBattery =(float) 20.1;
+        this.minBattery= (float)20.0;
+        this.battery = (float) 10;
+        // this.price = (float) 0.0;
+        this.minPrice = (float) 0.0;
+        this.maxPrice = (float) 0.0;
+        this.estimatedOutTime = null;
+        this.entryTime = null;
+
+    }
+
 
     public CarObject(String name, float batterylife, String cartype, float addBattery){
         this.carName = name;
@@ -97,6 +111,9 @@ public class CarObject implements Runnable{
 
     public String getCarName(){  return this.carName;     }
 
+    public void setCarName(String name){this.carName = name;}
+
+
     public Boolean activity(){
         return this.active;
     }
@@ -107,7 +124,7 @@ public class CarObject implements Runnable{
 
     public Float getMinBattery(){return this.minBattery;}
     public void setMinBattery(float n){this.minBattery = n;}
-
+    public Float getAddBattery(){return this.addBattery;}
     public Float getMaxBattery(){return this.maxBattery;}
     public void setMaxBattery(float n){this.maxBattery = n;}
 
