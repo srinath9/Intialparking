@@ -68,16 +68,8 @@ public class RandomGeneration {
         batterylabel.setText("Present Parking lot purchase Price is : " + sellvalue);
 
 
-        Boolean active;
-        active = false;
-
-        comboBox = new ComboBox<String>();
-
-
         for (int j=0;j<100;j++){
-            carList[j] = new CarObject(RandomClass.stringValue(),RandomClass.integerValue(30),"Buyer",RandomClass.integerValue(0),(float) RandomClass.integerValue(10),(float) RandomClass.integerValue(3));
-
-
+            carList[j] = new CarObject(RandomClass.stringValue(),"Buyer",RandomClass.integerValue(30),RandomClass.integerValue(0));
             Random r =new Random();
             long unixtime=(long) (1293861599+r.nextDouble()*60*60*24*365);
             Date d1 = new Date(unixtime);
@@ -89,12 +81,8 @@ public class RandomGeneration {
             Calendar calendar = Calendar.getInstance();
             java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
             java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
-
-
             carList[j].setEntryTime(t1);
-            carList[j].setExistTime(t2);
-
-
+            carList[j].setStayTime(t2);
 
         }
 
@@ -105,10 +93,6 @@ public class RandomGeneration {
         Button no = new Button("Dont sell");
 
         no.setOnAction(e -> window.close());
-
-
-
-
 
         HBox hBox = new HBox();
         hBox.setPadding(new Insets(10, 10, 10, 10));
@@ -150,21 +134,11 @@ public class RandomGeneration {
 
 
 
-
-
-
-
         VBox vBox = new VBox();
         vBox.getChildren().addAll(table, hBox1);
-
         Scene scene = new Scene(vBox);
         window.setScene(scene);
         window.show();
-
-
-
-
-
 
 
         Label label1 = new Label();
@@ -202,8 +176,6 @@ public class RandomGeneration {
     }
 
     public static TableView<CarObject> tableDisplay(CarObject[] carList){
-
-
         TableColumn<CarObject, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setMinWidth(200);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("carName"));
@@ -231,22 +203,14 @@ public class RandomGeneration {
         existTime.setMinWidth(200);
         existTime.setCellValueFactory(new PropertyValueFactory<>("estimatedOutTime"));
 
-
-
         table = new TableView<>();
         table.setItems(getProduct(carList));
         table.getColumns().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime);
-
-
-
         return table;
-
-
-
     }
 
     public static void addButtonClicked(String carName, Float minPrice, Float maxPrice){
-        CarObject product = new CarObject();
+        CarObject product = new CarObject(carName,"Buyer");
       //  System.out.println(carNameInput.getText());
         product.setCarName(carName);
         //Float.parseFloat(minPriceInput.getText()

@@ -59,7 +59,7 @@ public class CarObject{
     }
 
 
-    public CarObject(String name, String cartype, float minPrice, float maxPrice, Timestamp entryTime, Timestamp StayTime, float criticalMinBattery,float initialBattery) {
+    public CarObject(String name, String cartype, Float minPrice, Float maxPrice, Timestamp entryTime, Timestamp StayTime, Float criticalMinBattery,Float initialBattery) {
         this.carName = name;
         this.type = cartype;
         // this.price = (float) 0.0;

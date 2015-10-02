@@ -132,16 +132,14 @@ public class UserInfo {
         TextField carname = new TextField(""+car.getCarName());
         TextField minBattery = new TextField(""+car.getInitialBattery());
         TextField maxBattery = new TextField(""+car.getCriticalMinBattery());
-        TextField addBattery = new TextField();
+
 
         Label carlabel = new Label();
-        Label minBatterylabel = new Label("min battery level");
-        Label maxBatterylabel = new Label("max battery level");
-        Label addBatteryLabel = new Label("energy level you want to add");
+        Label minBatterylabel = new Label("Initial battery level");
+        Label maxBatterylabel = new Label("Critical Battery level");
+
         Label typelabel = new Label();
         carlabel.setText("give the name");
-
-        addBatteryLabel.setText("required ammount of battery");
 
 
         final ToggleGroup group = new ToggleGroup();
@@ -238,10 +236,10 @@ public class UserInfo {
         VBox vb2 = new VBox(10);
         VBox vb3 = new VBox(10);
 
-        vb1.getChildren().addAll(carlabel, minBatterylabel,maxBatterylabel,addBatteryLabel);
+        vb1.getChildren().addAll(carlabel, minBatterylabel,maxBatterylabel);
         vb1.setSpacing(20);
 
-        vb2.getChildren().addAll(carname,minBattery,maxBattery,addBattery);
+        vb2.getChildren().addAll(carname,minBattery,maxBattery);
 
         hb.getChildren().addAll(rb1,rb2,rb3);
         hb1.getChildren().addAll(vb1,vb2);
@@ -254,7 +252,7 @@ public class UserInfo {
         carname.setMaxWidth(100);
         minBattery.setMaxWidth(100);
         maxBattery.setMaxWidth(100);
-        addBattery.setMaxWidth(100);
+      
         layout7.getChildren().addAll(hb1, typelabel, hb);
         layout7.setAlignment(Pos.CENTER);
 
