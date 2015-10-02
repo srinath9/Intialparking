@@ -10,33 +10,14 @@ import java.sql.Statement;
  */
 public class DatabaseConnection {
 
-    public static void main(String[] args) {
-        try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (Exception ex) {
-            // handle the error
-        }
-    }
 
     public static void saveDetials(CarObject car){
 
-        try
-        {
-            // loads com.mysql.jdbc.Driver into memory
-            Class.forName("com.mysql.jdbc.Driver");
-        }
-        catch (ClassNotFoundException cnf)
-        {
-            System.out.println("Driver could not be loaded: " + cnf);
-        }
-
+        dbConn();
         Connection conn = null;
         try {
             // System.out.println("try to connect");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_cars","root", "srinath");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car","root", "");
             Statement stmt = conn.createStatement();
             //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
             String sql = "INSERT INTO `cardetails` (carType,carName,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryLeveltoAdd) "
@@ -47,6 +28,8 @@ public class DatabaseConnection {
             {
                 // ResultSet rs = stmt.executeQuery(sql);
                 stmt.executeUpdate(sql);
+
+                System.out.println("details saved");
             }
             catch (SQLException sqle)
             {
@@ -54,10 +37,59 @@ public class DatabaseConnection {
             }
 
         } catch (SQLException re) {
-          //  System.out.println("failed to connect");
-            re.printStackTrace();
+            System.out.println("failed to connect");
+          //  re.printStackTrace();
         }
 
+
+    }
+
+    public static void updateDeatils(CarObject car, int n){
+        dbConn();
+        Connection conn = null;
+        try {
+            // System.out.println("try to connect");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car","root", "");
+            Statement stmt = conn.createStatement();
+            //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
+            String sql = "UPDATE  `cardetails` SET carType = '"+car.getType()+"',carName ='"+car.getCarName()+"',minPrice = '"+car.getMinPrice()+"',maxPrice = '"
+                    +car.getMaxPrice()+"',entryTime = '"+ car.getEntryTime() +"', existTime = '"  +car.getEstimatedOutTime()+"',batteryMin = '"+car.getMinBattery()+
+                    "',batteryMax ='"+car.getMaxBattery()+"',batteryLeveltoAdd = '"+car.getBattery()+"'  WHERE carId ="+n;
+
+            System.out.println(sql);
+
+
+
+            try
+            {
+                // ResultSet rs = stmt.executeQuery(sql);
+                System.out.println("details saved");
+                stmt.executeUpdate(sql);
+
+            }
+            catch (SQLException sqle)
+            {
+                System.out.println("SQL Exception thrown: " + sqle);
+            }
+
+        } catch (SQLException re) {
+            System.out.println("failed to connect");
+            //  re.printStackTrace();
+        }
+    }
+
+
+
+    public static void dbConn(){
+        try
+        {
+            // loads com.mysql.jdbc.Driver into memory
+            Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (ClassNotFoundException cnf)
+        {
+            System.out.println("Driver could not be loaded: " + cnf);
+        }
 
     }
 

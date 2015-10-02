@@ -43,7 +43,7 @@ public class Main extends Application {
         button2.setOnAction(e -> window.setScene(scene1));
 
         Button showdatabase = new Button("Show saved users");
-        showdatabase.setOnAction(e->ShowDetails.display());
+        showdatabase.setOnAction(e->ShowDetails.userCarDetails());
         VBox layout1 = new VBox(20);
 
 
@@ -51,6 +51,8 @@ public class Main extends Application {
 
         Button button = new Button("Add new car");
         Button rangenButton = new Button("Generate random 100 cars list");
+        Button buyingPrice = new Button("present buying price");
+        Button sellingPrice = new Button("present Selling price");
         int i=0;
 
 
@@ -63,17 +65,22 @@ public class Main extends Application {
         });
 
 
-
         rangenButton.setOnAction(e -> {
             CarObject[] randomCars = RandomGeneration.display();
-            System.out.println("array" );
-
-
 
         });
+
+        buyingPrice.setOnAction(e->{
+            System.out.println("asdkfjbsdfkbsd asfkufhsdiuf hsdiuf ");
+            SettingPrice.buyingprice();
+        });
+
+        sellingPrice.setOnAction(e-> SettingPrice.sellingPrice());
+
+
         layout1.setAlignment(Pos.CENTER);
 
-        layout1.getChildren().addAll( button,rangenButton,showdatabase);
+        layout1.getChildren().addAll( button,rangenButton,showdatabase,buyingPrice,sellingPrice);
 
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);

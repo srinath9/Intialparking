@@ -50,19 +50,6 @@ public class SettingPrice {
 
         batterylabel.setText("Present Parking lot purchase Price is : " + sellvalue);
 
-
-
-        Boolean active;
-        active = false;
-
-        comboBox = new ComboBox<String>();
-       // comboBox.getItems().addAll(
-      //          objecttoString( car));
-        /*comboBox.setPromptText("What is your Type you want?");*/
-
-
-
-
         Button yes = new Button("Sell ");
         Button no = new Button("Dont sell");
 
@@ -71,23 +58,10 @@ public class SettingPrice {
 
         yes.setOnAction(
                 e -> {
-                   // userName[0] = comboBox.getValue();
-                    // CarObject carObject =  searchName(userName[0],car);
-                   // changeValue(userName[0]);
-                   // //System.out.println("the customer is  "+carObject.customerName());
-
-                    // int sellvalue = RandomClass.sellingPrice();
-                 //   car.selling(sellvalue);
-                //    car.getPrice();
                     car.setMinPrice(Float.parseFloat(val(minPrice.getText())));
                     car.setMaxPrice(Float.parseFloat(val(maxPrice.getText())));
-
-
                     System.out.println("min price " + car.getMinPrice() + " max price" + car.getMaxPrice());
-
-                    UserInfo.savedDeatials(car);
-
-                    
+                    UserInfo.savedDeatials(car,"save",0);
                     window.close();
                 }
         );
@@ -107,8 +81,21 @@ public class SettingPrice {
         layout4.setAlignment(Pos.CENTER);
         layout3.setAlignment(Pos.CENTER_RIGHT);
         layout2.setAlignment(Pos.CENTER_LEFT);
-        layout3.getChildren().addAll(minPrice, maxPrice);
-        layout2.getChildren().addAll(minPricelabel,maxPricelabel);
+
+        if(car.getType() == "Both"){
+            layout3.getChildren().addAll(minPrice, maxPrice);
+            layout2.getChildren().addAll(minPricelabel,maxPricelabel);
+        }
+        else if (car.getType() == "Seller"){
+            layout3.getChildren().addAll(maxPrice);
+            layout2.getChildren().addAll(maxPricelabel);
+        }
+        else{
+            layout3.getChildren().addAll(minPrice);
+            layout2.getChildren().addAll(minPricelabel);
+        }
+
+
 
         layout.setAlignment(Pos.CENTER);
 
@@ -178,6 +165,68 @@ public class SettingPrice {
 
     private static void changeValue(String result){
         resultValue = result;
+
+    }
+
+    public static void buyingprice(){
+        Stage window = new Stage();
+        Button closeButton = new Button("close the widow");
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setMinWidth(500);
+
+        float minvalue = (float) RandomClass.integerValue(0);
+        TextField minPrice = new TextField(String.valueOf(minvalue/10));
+
+        TextField maxPrice = new TextField(String.valueOf(RandomClass.greaterthanmin(minvalue)));
+        maxPrice.setDisable(true);
+
+        Label maxPriceLabel = new Label("present buying Price is ");
+
+        HBox layout4 = new HBox(10);
+        closeButton.setOnAction(e->window.close());
+
+        layout4.getChildren().addAll(maxPriceLabel, maxPrice, closeButton);
+        layout4.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout4);
+        layout4.setMinHeight(100);
+        window.setTitle("Adding from Seller");
+        window.setScene(scene);
+        window.show();
+
+
+
+
+    }
+
+    public static void sellingPrice(){
+        Stage window = new Stage();
+        Button closeButton = new Button("close the widow");
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setMinWidth(500);
+
+        float minvalue = (float) RandomClass.integerValue(0);
+        Label minPriceLabel = new Label(" present selling Price is ");
+
+        TextField minPrice = new TextField(String.valueOf(minvalue));
+        minPrice.setDisable(true);
+
+
+
+        HBox layout4 = new HBox(10);
+        closeButton.setOnAction(e->window.close());
+
+        layout4.getChildren().addAll(minPriceLabel, minPrice, closeButton);
+        layout4.setAlignment(Pos.CENTER);
+        layout4.setMinHeight(100);
+
+        Scene scene = new Scene(layout4);
+        window.setTitle("Adding from Seller");
+        window.setScene(scene);
+        window.show();
+
+
+
 
     }
 

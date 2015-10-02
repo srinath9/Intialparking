@@ -97,13 +97,29 @@ public class UserInfo {
         return ""+message;
     }
 
+    public static void noResult(){
+        Stage window = null;
+
+        VBox vbox = new VBox(10);
+        Label noresult = new Label("there is  no such index");
+        Button close = new Button("close");
+        vbox.getChildren().addAll(noresult, close);
+
+        Scene scene = new Scene(vbox);
+
+        window.setScene(scene);
+        window.show();
+
+    }
+
+
     public static ObservableList<CarObject> getProduct(CarObject carList){
         ObservableList<CarObject> products = FXCollections.observableArrayList();
         products.add(carList);
         return products;
     }
 
-    public static void savedDeatials(CarObject car){
+    public static void savedDeatials(CarObject car, String updateType, int carId){
         final Stage window = new Stage();
         /*Button closeButton = new Button("close the widow");*/
 
@@ -112,9 +128,10 @@ public class UserInfo {
         window.setMinWidth(500);
         window.setMinHeight(500);
 
-        ComboBox<String> comboBox;
+
         TextField carname = new TextField(""+car.getCarName());
-        TextField batterylife = new TextField(""+car.getMinBattery());
+        TextField minBattery = new TextField(""+car.getMinBattery());
+        TextField maxBattery = new TextField(""+car.getMaxBattery());
         TextField addBattery = new TextField();
         int randnum = RandomClass.integerValue(0);
 
@@ -125,8 +142,9 @@ public class UserInfo {
 
 
         Label carlabel = new Label();
-        Label batterylabel = new Label("min battery level");
-        Label addBatteryLabel = new Label();
+        Label minBatterylabel = new Label("min battery level");
+        Label maxBatterylabel = new Label("max battery level");
+        Label addBatteryLabel = new Label("energy level you want to add");
         Label typelabel = new Label();
         carlabel.setText("give the name");
 
@@ -142,9 +160,6 @@ public class UserInfo {
         rb2.setToggleGroup(group);
         rb3.setToggleGroup(group);
 
-        if (car.getType() == "Buyer") rb2.setSelected(true);
-        else if (car.getType() == "Seller") rb1.setSelected(true);
-        else rb3.setSelected(true);
 
 
         final float sellvalue = RandomClass.sellingPrice();
@@ -156,6 +171,21 @@ public class UserInfo {
         TextField minPrice = new TextField(""+car.getMinPrice());
         TextField maxPrice = new TextField(""+car.getMaxPrice());
 
+        if (car.getType() == "Buyer"){
+            rb2.setSelected(true);
+            maxPrice.setText("");
+            maxPrice.setDisable(true);
+        }
+        else if (car.getType() == "Seller"){
+            rb1.setSelected(true);
+            minPrice.setText("");
+            minPrice.setDisable(true);
+        }
+        else{
+            rb3.setSelected(true);
+        }
+
+
         /*comboBox.setPromptText("What is your Type you want?");*/
 
        /* comboBox.setOnAction(e -> System.out.print(comboBox.getValue()));*/
@@ -163,7 +193,21 @@ public class UserInfo {
         Button close = new Button("Close");
 
         yes.setOnAction(e->{
-            DatabaseConnection.saveDetials(car);
+            System.out.println("before saving details "+ updateType);
+            car.setCarName(carname.getText());
+            car.setMaxPrice(Float.parseFloat(maxPrice.getText()));
+            car.setMinPrice(Float.parseFloat(minPrice.getText()));
+            car.setMinBattery(Float.parseFloat(minBattery.getText()));
+            car.setMaxBattery(Float.parseFloat(maxBattery.getText()));
+            car.setAddBattery(Float.parseFloat(addBattery.getText()));
+            car.myData();
+
+
+            if (updateType == "save"){
+                System.out.println("before saving details "+ updateType);
+                DatabaseConnection.saveDetials(car);
+            }
+            else if (carId !=0)DatabaseConnection.updateDeatils(car,carId);
             window.close();
         });
         close.setOnAction(e-> window.close());
@@ -201,10 +245,10 @@ public class UserInfo {
         VBox vb2 = new VBox(10);
         VBox vb3 = new VBox(10);
 
-        vb1.getChildren().addAll(carlabel, addBatteryLabel,batterylabel);
+        vb1.getChildren().addAll(carlabel, minBatterylabel,maxBatterylabel,addBatteryLabel);
         vb1.setSpacing(20);
 
-        vb2.getChildren().addAll(carname,batterylife,addBattery);
+        vb2.getChildren().addAll(carname,minBattery,maxBattery,addBattery);
 
         hb.getChildren().addAll(rb1,rb2,rb3);
         hb1.getChildren().addAll(vb1,vb2);
@@ -215,7 +259,8 @@ public class UserInfo {
         hb1.setAlignment(Pos.CENTER);
         //      hb3.setAlignment(Pos.CENTER);
         carname.setMaxWidth(100);
-        batterylife.setMaxWidth(100);
+        minBattery.setMaxWidth(100);
+        maxBattery.setMaxWidth(100);
         addBattery.setMaxWidth(100);
         layout7.getChildren().addAll(hb1, typelabel, hb);
         layout7.setAlignment(Pos.CENTER);
@@ -224,11 +269,7 @@ public class UserInfo {
         Scene scene = new Scene(layout);
         window.setTitle("Adding from Seller");
 
-
-
         window.setScene(scene);
-
-
         window.showAndWait();
     }
 

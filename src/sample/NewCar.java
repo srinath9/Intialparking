@@ -93,57 +93,41 @@ public class NewCar/*extends StringConverter<String>*/  {
         /*Button no = new Button("NO");*/
 
         yes.setOnAction(e -> {
-
-
-
-
-//            int index = i;
- //           incVal();
-
-  //          System.out.println("index value is: " + index);
-
-            answer = true;
-            
+            final CarObject car;
             if(rb3.isSelected()){
                 System.out.println(carname.getText() + " " + batterylife.getText() + " Both" + " add battery " + batterylife.getText());
-                final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Both",Float.parseFloat(val(addBattery.getText())));
-                car.setMinBattery(Float.parseFloat(val(batterylife.getText())));
-                car.setMaxBattery(Float.parseFloat(val(addBattery.getText())));
-
-
-                System.out.format("system details      %s, %s, %s  , %s %s\n", car.getCarName(), car.getType(), car.getMinBattery(), car.getMaxBattery(), car.getMinBattery());
-                System.out.println("car min value : "+car.getMinPrice());
-                Calendar calendar = Calendar.getInstance();
-                java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
-                java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
-
-
-                car.setEntryTime(t1);
-                car.setExistTime(t2);
-
-             //   System.out.println(offset+"\n"+end+"\n"+diff+"\n"+rand);
-
-                SettingPrice.display(carname.getText(), "Select the Seller ", i, car);
-                //System.out.println("get the new window : result  "+ result);
-
-                //resultCarDetails =  Distributor.searchName(result, car);
-
-                car.addBatteryLife(Float.parseFloat(val(addBattery.getText())));
-
-               // car.myData();
-                window.close();
+                car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Both",Float.parseFloat(val(addBattery.getText())));
 
 
             }
             else if(rb1.isSelected()) {
            //     System.out.println(carname.getText() + " " + batterylife.getText() + " Seller");
-                final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Seller",Float.parseFloat(val(addBattery.getText())));
+                  car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Seller",Float.parseFloat(val(addBattery.getText())));
+
             }
             else{
            //     System.out.println(carname.getText() + " " + batterylife.getText() + " Buyer");
-                final CarObject car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
+                  car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
 
             }
+
+
+            car.setMinBattery(Float.parseFloat(val(batterylife.getText())));
+            car.setMaxBattery(Float.parseFloat(val(addBattery.getText())));
+
+            System.out.format("system details      %s, %s, %s  , %s %s\n", car.getCarName(), car.getType(), car.getMinBattery(), car.getMaxBattery(), car.getMinBattery());
+            System.out.println("car min value : " + car.getMinPrice());
+            setTime(car);
+
+            SettingPrice.display(carname.getText(), "Select the Seller ", i, car);
+            //System.out.println("get the new window : result  "+ result);
+
+            //resultCarDetails =  Distributor.searchName(result, car);
+
+            car.addBatteryLife(Float.parseFloat(val(addBattery.getText())));
+
+            // car.myData();
+            window.close();
 
         });
 
@@ -186,6 +170,16 @@ public class NewCar/*extends StringConverter<String>*/  {
 
         /*return car;*/
         /*return resultCarDetails;*/
+
+    }
+
+    private static void setTime(CarObject car){
+        Calendar calendar = Calendar.getInstance();
+        java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
+        java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
+
+        car.setEntryTime(t1);
+        car.setExistTime(t2);
 
     }
 

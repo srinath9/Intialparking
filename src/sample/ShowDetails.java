@@ -100,7 +100,7 @@ public class ShowDetails {
 
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_cars", "root", "srinath");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car", "root", "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -137,9 +137,9 @@ public class ShowDetails {
                 Float batteryMax = rs.getFloat("batteryMax");
                 Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
 
-                // print the results
-               /* System.out.format("%s, %s, %s, %s, %s %s %s %s\n", id, firstName, lastName, *//*entryTime, existTime,*//* minPrice,batteryMax, batteryAdd, minPrice);*/
-                System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, batteryMax, batteryAdd,existTime , entryTime);
+
+
+        //        System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, batteryMax, batteryAdd,existTime , entryTime);
                 savesList[i] = new CarObject(carName,(float)10.0,carType,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryAdd);
                 i=i+1;
 
@@ -220,6 +220,93 @@ public class ShowDetails {
 
     public static <T> String val(T message){
         return ""+message;
+    }
+
+
+    public static void userCarDetails(){
+        Stage window = new Stage();
+        System.out.println(" indeside car details");
+
+        Label carIndexLabel = new Label("give the index number of the car ");
+        TextField carIndex = new TextField("28");
+        carIndex.setMaxWidth(100);
+        Button search = new Button("Search index");
+
+
+        search.setOnAction(e -> {
+            searchIndex(Integer.parseInt(carIndex.getText()));
+
+            window.close();
+        });
+
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(carIndexLabel,carIndex,search);
+        vbox.setMinHeight(200);
+        vbox.setMinWidth(300);
+        vbox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vbox);
+
+        window.setScene(scene);
+        window.show();
+
+
+    }
+
+    public static void searchIndex(int n){
+        DatabaseConnection.dbConn();
+        System.out.println(" indeside searhc");
+
+        String sql = "SELECT * FROM cardetails WHERE carId LIKE '"+n+"'";
+
+        try {
+            // System.out.println("try to connect");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car", "root", "");
+            Statement stmt = conn.createStatement();
+
+            try
+            {
+                ResultSet rs = stmt.executeQuery(sql);
+     /*           stmt.executeUpdate(sql);*/
+                System.out.println(rs);
+                CarObject[] savesList = new CarObject[100];
+                int i =0;
+                int id = 0;
+                while (rs.next())
+                {
+                    id = rs.getInt("carId");
+                    String carType = rs.getString("carType");
+                    String carName = rs.getString("carName");
+                    Timestamp entryTime = rs.getTimestamp("entryTime");
+                    Timestamp existTime = rs.getTimestamp("existTime");
+                    Float minPrice = rs.getFloat("minPrice");
+                    Float maxPrice = rs.getFloat("maxPrice");
+                    Float batteryMin = rs.getFloat("minPrice");
+                    Float batteryMax = rs.getFloat("batteryMax");
+                    Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
+
+                    savesList[i] = new CarObject(carName,(float)10.0,carType,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryAdd);
+                    i=i+1;
+
+                }
+
+                if( i==1) UserInfo.savedDeatials(savesList[0],"Update",id);
+                else UserInfo.noResult();
+
+            }
+            catch (SQLException sqle)
+            {
+                System.out.println("SQL Exception thrown: " + sqle);
+            }
+
+        } catch (SQLException re) {
+            System.out.println("failed to connect");
+            //  re.printStackTrace();
+        }
+
+
+
+
+
     }
 
 
