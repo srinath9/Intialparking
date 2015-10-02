@@ -129,18 +129,15 @@ public class ShowDetails {
                 Timestamp entryTime = rs.getTimestamp("entryTime");
                 Timestamp existTime = rs.getTimestamp("existTime");
 
-
               //  System.out.println(rs.getTimestamp("entryTime"));
                 Float minPrice = rs.getFloat("minPrice");
                 Float maxPrice = rs.getFloat("maxPrice");
-                Float batteryMin = rs.getFloat("minPrice");
-                Float batteryMax = rs.getFloat("batteryMax");
+                Float intialBattery = rs.getFloat("minPrice");
+                Float criticalBattery = rs.getFloat("criticalBattery");
                 Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
 
-
-
-        //        System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, batteryMax, batteryAdd,existTime , entryTime);
-                savesList[i] = new CarObject(carName,(float)10.0,carType,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryAdd);
+        //        System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, criticalBattery, batteryAdd,existTime , entryTime);
+                savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,existTime,intialBattery,criticalBattery);
                 i=i+1;
 
             }
@@ -158,23 +155,6 @@ public class ShowDetails {
         Scene scene = new Scene(vBox);
         window.setScene(scene);
         window.show();
-
-
-        yes.setOnAction(e -> {
-
-
-
-
-//            int index = i;
-            //           incVal();
-
-            //          System.out.println("index value is: " + index);
-
-            answer = true;
-
-
-
-        });
 
 
 
@@ -277,14 +257,13 @@ public class ShowDetails {
                     String carType = rs.getString("carType");
                     String carName = rs.getString("carName");
                     Timestamp entryTime = rs.getTimestamp("entryTime");
-                    Timestamp existTime = rs.getTimestamp("existTime");
+                    Timestamp stayTime = rs.getTimestamp("stayTime");
                     Float minPrice = rs.getFloat("minPrice");
                     Float maxPrice = rs.getFloat("maxPrice");
-                    Float batteryMin = rs.getFloat("minPrice");
-                    Float batteryMax = rs.getFloat("batteryMax");
-                    Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
-
-                    savesList[i] = new CarObject(carName,(float)10.0,carType,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryAdd);
+                    Float initialBattery = rs.getFloat("batteryIntial");
+                    Float criticalBattery = rs.getFloat("batteryCriticalMin");
+                    
+                    savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,stayTime,initialBattery,criticalBattery);
                     i=i+1;
 
                 }

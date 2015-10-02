@@ -96,26 +96,24 @@ public class NewCar/*extends StringConverter<String>*/  {
             final CarObject car;
             if(rb3.isSelected()){
                 System.out.println(carname.getText() + " " + batterylife.getText() + " Both" + " add battery " + batterylife.getText());
-                car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Both",Float.parseFloat(val(addBattery.getText())));
-
-
+                car = new CarObject(val(carname.getText()),  "Both");
             }
             else if(rb1.isSelected()) {
            //     System.out.println(carname.getText() + " " + batterylife.getText() + " Seller");
-                  car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Seller",Float.parseFloat(val(addBattery.getText())));
-
+                  car = new CarObject(val(carname.getText()), "Seller");
             }
             else{
            //     System.out.println(carname.getText() + " " + batterylife.getText() + " Buyer");
-                  car = new CarObject(val(carname.getText()), Float.parseFloat(val(batterylife.getText())), "Buyer",Float.parseFloat(val(addBattery.getText())));
+                  car = new CarObject(val(carname.getText()), "Buyer");
+
 
             }
 
 
-            car.setMinBattery(Float.parseFloat(val(batterylife.getText())));
-            car.setMaxBattery(Float.parseFloat(val(addBattery.getText())));
+            car.setInitialBattery(Float.parseFloat(val(batterylife.getText())));
+            car.setCriticalMinBattery(Float.parseFloat(val(addBattery.getText())));
 
-            System.out.format("system details      %s, %s, %s  , %s %s\n", car.getCarName(), car.getType(), car.getMinBattery(), car.getMaxBattery(), car.getMinBattery());
+            System.out.format("system details      %s, %s, %s  ,  %s\n", car.getCarName(), car.getType(), car.getInitialBattery(), car.getCriticalMinBattery());
             System.out.println("car min value : " + car.getMinPrice());
             setTime(car);
 
@@ -124,7 +122,6 @@ public class NewCar/*extends StringConverter<String>*/  {
 
             //resultCarDetails =  Distributor.searchName(result, car);
 
-            car.addBatteryLife(Float.parseFloat(val(addBattery.getText())));
 
             // car.myData();
             window.close();
@@ -179,7 +176,7 @@ public class NewCar/*extends StringConverter<String>*/  {
         java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
 
         car.setEntryTime(t1);
-        car.setExistTime(t2);
+        car.setStayTime(t2);
 
     }
 
