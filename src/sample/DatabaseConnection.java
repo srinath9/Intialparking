@@ -20,9 +20,9 @@ public class DatabaseConnection {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car","root", "");
             Statement stmt = conn.createStatement();
             //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
-            String sql = "INSERT INTO `cardetails` (carType,carName,minPrice,maxPrice,entryTime,existTime,batteryMin,batteryMax,batteryLeveltoAdd) "
+            String sql = "INSERT INTO `cardetails` (carType,carName,minPrice,maxPrice,entryTime,stayTime,batteryIntial,batteryCriticalMin) "
                     + "VALUES ('"+car.getType()+"','"+car.getCarName()+"',"+car.getMinPrice()+","+car.getMaxPrice()+",'" + car.getEntryTime()+"','"
-                    +car.getEstimatedOutTime()+"',"+car.getMinBattery()+","+car.getMaxBattery()+","+car.getBattery()+")";
+                    +car.getStayTime()+"',"+car.getInitialBattery()+","+car.getCriticalMinBattery()+")";
 
             try
             {
@@ -53,8 +53,8 @@ public class DatabaseConnection {
             Statement stmt = conn.createStatement();
             //  System.out.println("sjkdfbsfbsjfdh       sadjfbhs fshd sahf jsdhf gsjfd jsd js fjgsd f");
             String sql = "UPDATE  `cardetails` SET carType = '"+car.getType()+"',carName ='"+car.getCarName()+"',minPrice = '"+car.getMinPrice()+"',maxPrice = '"
-                    +car.getMaxPrice()+"',entryTime = '"+ car.getEntryTime() +"', existTime = '"  +car.getEstimatedOutTime()+"',batteryMin = '"+car.getMinBattery()+
-                    "',batteryMax ='"+car.getMaxBattery()+"',batteryLeveltoAdd = '"+car.getBattery()+"'  WHERE carId ="+n;
+                    +car.getMaxPrice()+"',entryTime = '"+ car.getEntryTime() +"',stayTime = '"  +car.getStayTime()+"',batteryIntial = '"+car.getInitialBattery()+
+                    "',batteryCriticalMin ='"+car.getCriticalMinBattery()+"'  WHERE carId ="+n;
 
             System.out.println(sql);
 
