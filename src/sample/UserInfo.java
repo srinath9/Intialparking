@@ -130,16 +130,9 @@ public class UserInfo {
 
 
         TextField carname = new TextField(""+car.getCarName());
-        TextField minBattery = new TextField(""+car.getMinBattery());
-        TextField maxBattery = new TextField(""+car.getMaxBattery());
+        TextField minBattery = new TextField(""+car.getInitialBattery());
+        TextField maxBattery = new TextField(""+car.getCriticalMinBattery());
         TextField addBattery = new TextField();
-        int randnum = RandomClass.integerValue(0);
-
-
-        //batterylife.setText(""+car.get));
-        addBattery.setText(""+car.getMaxBattery());
-
-
 
         Label carlabel = new Label();
         Label minBatterylabel = new Label("min battery level");
@@ -197,9 +190,9 @@ public class UserInfo {
             car.setCarName(carname.getText());
             car.setMaxPrice(Float.parseFloat(maxPrice.getText()));
             car.setMinPrice(Float.parseFloat(minPrice.getText()));
-            car.setMinBattery(Float.parseFloat(minBattery.getText()));
-            car.setMaxBattery(Float.parseFloat(maxBattery.getText()));
-            car.setAddBattery(Float.parseFloat(addBattery.getText()));
+            car.setCriticalMinBattery(Float.parseFloat(minBattery.getText()));
+            car.setInitialBattery(Float.parseFloat(maxBattery.getText()));
+
             car.myData();
 
 
