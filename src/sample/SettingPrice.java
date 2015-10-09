@@ -11,13 +11,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * Created by srinath on 9/4/2015.
  */
+
+
+
+
 public class SettingPrice {
     static private String resultValue;
+
+
 
     public static void display(String title, String message, int i, CarObject car){
         Stage window = new Stage();
@@ -58,9 +66,9 @@ public class SettingPrice {
 
         yes.setOnAction(
                 e -> {
-                    car.setMinPrice(Float.parseFloat(val(minPrice.getText())));
-                    car.setMaxPrice(Float.parseFloat(val(maxPrice.getText())));
-                    System.out.println("min price " + car.getMinPrice() + " max price" + car.getMaxPrice());
+                    car.setBuyPrice(Float.parseFloat(val(minPrice.getText())));
+                    car.setSellingPrice(Float.parseFloat(val(maxPrice.getText())));
+                    System.out.println("min price " + car.getBuyPrice() + " max price" + car.getSellingPrice());
                     UserInfo.savedDeatials(car,"save",0);
                     window.close();
                 }

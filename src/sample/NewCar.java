@@ -114,7 +114,7 @@ public class NewCar/*extends StringConverter<String>*/  {
             car.setCriticalMinBattery(Float.parseFloat(val(addBattery.getText())));
 
             System.out.format("system details      %s, %s, %s  ,  %s\n", car.getCarName(), car.getType(), car.getInitialBattery(), car.getCriticalMinBattery());
-            System.out.println("car min value : " + car.getMinPrice());
+            System.out.println("car min value : " + car.getBuyPrice());
             setTime(car);
 
             SettingPrice.display(carname.getText(), "Select the Seller ", i, car);
@@ -175,8 +175,8 @@ public class NewCar/*extends StringConverter<String>*/  {
         java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime());
         java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime());
 
-        car.setEntryTime(t1);
-        car.setStayTime(t2);
+        car.setPlugInTime(t1);
+        car.setExistTime(t2);
 
     }
 

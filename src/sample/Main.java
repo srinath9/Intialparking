@@ -18,6 +18,12 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class Main extends Application {
@@ -43,7 +49,7 @@ public class Main extends Application {
         button2.setOnAction(e -> window.setScene(scene1));
 
         Button showdatabase = new Button("Show saved users");
-        showdatabase.setOnAction(e->ShowDetails.userCarDetails());
+        showdatabase.setOnAction(e -> ShowDetails.userCarDetails());
         VBox layout1 = new VBox(20);
 
 
@@ -53,13 +59,14 @@ public class Main extends Application {
         Button rangenButton = new Button("Generate random 100 cars list");
         Button buyingPrice = new Button("present buying price");
         Button sellingPrice = new Button("present Selling price");
+        Button transaction = new Button("Transasction");
         int i=0;
 
 
-        button.setOnAction(e->{
+        button.setOnAction(e -> {
 
              /*carResult =*/
-            NewCar.display("Battery Energy","Add the Detials",carList[0]);
+            NewCar.display("Battery Energy", "Add the Detials", carList[0]);
             /*System.out.print(carResult);*/
 
         });
@@ -74,13 +81,14 @@ public class Main extends Application {
             System.out.println("asdkfjbsdfkbsd asfkufhsdiuf hsdiuf ");
             SettingPrice.buyingprice();
         });
+        transaction.setOnAction(e->RunTimeResult.magic());
 
         sellingPrice.setOnAction(e-> SettingPrice.sellingPrice());
 
 
         layout1.setAlignment(Pos.CENTER);
 
-        layout1.getChildren().addAll( button,rangenButton,showdatabase,buyingPrice,sellingPrice);
+        layout1.getChildren().addAll( button,rangenButton,showdatabase,buyingPrice,sellingPrice,transaction);
 
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);

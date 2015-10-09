@@ -24,7 +24,7 @@ public class UserInfo {
 
         final Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setMinWidth(500);
+        window.setMinWidth(600);
         window.setMinHeight(500);
         Button yes = new Button("Add the battery life");
         Button close = new Button("Save and Exist");
@@ -76,6 +76,10 @@ public class UserInfo {
         existTime.setMinWidth(200);
         existTime.setCellValueFactory(new PropertyValueFactory<>("estimatedOutTime"));
 
+        TableColumn<CarObject, Float> plugInTime = new TableColumn<>("Plug In Time");
+        plugInTime.setMinWidth(200);
+        plugInTime.setCellValueFactory(new PropertyValueFactory<>("plugInDuration"));
+
 
 
         TableView<CarObject> table;
@@ -84,14 +88,10 @@ public class UserInfo {
 
         table = new TableView<>();
         table.setItems(getProduct(carList));
-        table.getColumns().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime);
+        table.getColumns().addAll(nameColumn, typeColumn, priceMin, priceMaxColumn, timeEntry, existTime, plugInTime);
         return table;
     }
 
-
-    public void changeDetails(CarObject carInfo){
-
-    }
 
     public static <T> String val(T message){
         return ""+message;
@@ -151,16 +151,12 @@ public class UserInfo {
         rb2.setToggleGroup(group);
         rb3.setToggleGroup(group);
 
-
-
-        final float sellvalue = RandomClass.sellingPrice();
-
         Label minPricelabel = new Label("set the min price below to start charge");
         Label maxPricelabel = new Label("Set the max prices value above which you want to sell");
 
 
-        TextField minPrice = new TextField(""+car.getMinPrice());
-        TextField maxPrice = new TextField(""+car.getMaxPrice());
+        TextField minPrice = new TextField(""+car.getBuyPrice());
+        TextField maxPrice = new TextField(""+car.getSellingPrice());
 
         if (car.getType() == "Buyer"){
             rb2.setSelected(true);
@@ -186,13 +182,11 @@ public class UserInfo {
         yes.setOnAction(e->{
             System.out.println("before saving details "+ updateType);
             car.setCarName(carname.getText());
-            car.setMaxPrice(Float.parseFloat(maxPrice.getText()));
-            car.setMinPrice(Float.parseFloat(minPrice.getText()));
+            car.setSellingPrice(Float.parseFloat(maxPrice.getText()));
+            car.setBuyPrice(Float.parseFloat(minPrice.getText()));
             car.setCriticalMinBattery(Float.parseFloat(minBattery.getText()));
             car.setInitialBattery(Float.parseFloat(maxBattery.getText()));
-
             car.myData();
-
 
             if (updateType == "save"){
                 System.out.println("before saving details "+ updateType);
@@ -202,7 +196,6 @@ public class UserInfo {
             window.close();
         });
         close.setOnAction(e-> window.close());
-
 
         VBox layout = new VBox(10);
         VBox layout2 = new VBox(10);
@@ -221,10 +214,6 @@ public class UserInfo {
 
         layout5.getChildren().addAll(layout2, layout3);
         layout5.setAlignment(Pos.CENTER);
-
-        Label label1 = new Label("Check the details");
-
-
 
         VBox layout7 = new VBox(10);
         HBox hb = new HBox(10);
@@ -252,7 +241,7 @@ public class UserInfo {
         carname.setMaxWidth(100);
         minBattery.setMaxWidth(100);
         maxBattery.setMaxWidth(100);
-      
+
         layout7.getChildren().addAll(hb1, typelabel, hb);
         layout7.setAlignment(Pos.CENTER);
 

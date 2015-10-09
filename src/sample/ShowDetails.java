@@ -102,7 +102,8 @@ public class ShowDetails {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_car", "root", "");
         } catch (SQLException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
+            System.out.println(" error while connecting databse");
         }
 
         String query = "SELECT * FROM cardetails";
@@ -137,13 +138,13 @@ public class ShowDetails {
                 Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
 
         //        System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, criticalBattery, batteryAdd,existTime , entryTime);
-                savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,existTime,intialBattery,criticalBattery);
+                savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,existTime,intialBattery,criticalBattery,"slow");
                 i=i+1;
 
             }
           //  System.out.println("carlist lenth : "+i);
 
-            table = RandomGeneration.tableDisplay(savesList);
+       //     table = RandomGeneration.tableDisplay(savesList);
             st.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -263,7 +264,7 @@ public class ShowDetails {
                     Float initialBattery = rs.getFloat("batteryIntial");
                     Float criticalBattery = rs.getFloat("batteryCriticalMin");
                     
-                    savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,stayTime,initialBattery,criticalBattery);
+                    savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,stayTime,initialBattery,criticalBattery,"slow");
                     i=i+1;
 
                 }
