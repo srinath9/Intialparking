@@ -22,10 +22,10 @@ public class RandomDetails {
             double buy = buyingPrice.nextGaussian() * 1.5 + 4;
             double sell = sellingPrice.nextGaussian() * 1.5 + 3;
 
-            while ( buy <0 || sell <0){
+            while ( buy <0 || sell <0 || buy > sell){
                 buy = buyingPrice.nextGaussian() * 1.5 + 4;
                 sell = sellingPrice.nextGaussian() * 1.5 + 3;
-                System.out.println(buy+" : "+sell);
+      //          System.out.println(buy+" : "+sell);
 
             }
 
@@ -43,7 +43,7 @@ public class RandomDetails {
 
             Calendar calendar = Calendar.getInstance();
 
-            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);
             java.sql.Timestamp t5 = new java.sql.Timestamp(calendar.getTime().getTime());
 
@@ -79,10 +79,20 @@ public class RandomDetails {
     public static PowerPlant[] setPlantDetails(){
         PowerPlant[] powerPlants = new PowerPlant[96];
         int slot = 0;
+        float sell ;
+
         while (slot<96){
-            powerPlants[slot] = new PowerPlant(slot,(float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1));
-      //      System.out.print(slot+"+"+ powerPlants[slot].getPrice()+"\t" );
+            sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
+            while (sell <0){
+                sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
+            }
+
+            Random energy = new Random();
+            float available = energy.nextFloat()*80;
+            System.out.print(available+"\t");
+            powerPlants[slot] = new PowerPlant(slot, sell,available);
             slot++;
+
         }
         System.out.println("");
 

@@ -172,53 +172,61 @@ public class RandomGeneration {
 
     public static TableView<CarObject> tableDisplay(CarObject[] carList){
         TableColumn<CarObject, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setMinWidth(150);
+        nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("carName"));
 
         //Price column
         TableColumn<CarObject, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setMinWidth(100);
+        typeColumn.setMinWidth(50);
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         TableColumn<CarObject, Float> priceMin = new TableColumn<>("Buy Price");
-        priceMin.setMinWidth(100);
+        priceMin.setMinWidth(75);
         priceMin.setCellValueFactory(new PropertyValueFactory<>("buyPrice"));
 
         //Price column
         TableColumn<CarObject, Float> priceMaxColumn = new TableColumn<>("Selling Price");
-        priceMaxColumn.setMinWidth(100);
+        priceMaxColumn.setMinWidth(75);
         priceMaxColumn.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
 
         TableColumn<CarObject, Date> plugInTime = new TableColumn<>("Plug In Time");
-        plugInTime.setMinWidth(200);
+        plugInTime.setMinWidth(150);
         plugInTime.setCellValueFactory(new PropertyValueFactory<>("plugInTime"));
 
         //Price column
         TableColumn<CarObject, Date> existTime = new TableColumn<>("Exist Time");
-        existTime.setMinWidth(200);
+        existTime.setMinWidth(150);
         existTime.setCellValueFactory(new PropertyValueFactory<>("existTime"));
 
         TableColumn<CarObject, Float> plugInDuration = new TableColumn<>("Plug In Duration");
-        plugInDuration.setMinWidth(100);
+        plugInDuration.setMaxWidth(80);
         plugInDuration.setCellValueFactory(new PropertyValueFactory<>("plugInDuration"));
 
         TableColumn<CarObject, Float> carId = new TableColumn<>("Car Id");
-        carId.setMinWidth(50);
+        carId.setMaxWidth(50);
         carId.setCellValueFactory(new PropertyValueFactory<>("carId"));
 
-        TableColumn<CarObject, Float> batteryLevel = new TableColumn<>("Battery Level");
+        TableColumn<CarObject, Float> batteryLevel = new TableColumn<>("Final Battery Level");
         batteryLevel.setMinWidth(100);
         batteryLevel.setCellValueFactory(new PropertyValueFactory<>("batteryLevel"));
 
         TableColumn<CarObject, Float> chargingType = new TableColumn<>("Charging Type");
-        chargingType.setMinWidth(100);
+        chargingType.setMaxWidth(60);
         chargingType.setCellValueFactory(new PropertyValueFactory<>("chargingType"));
+
+        TableColumn<CarObject, Float> initialBattery = new TableColumn<>("Inital Battery");
+        initialBattery.setMinWidth(100);
+        initialBattery.setCellValueFactory(new PropertyValueFactory<>("initialBattery"));
+
+        TableColumn<CarObject, Float> criticalMin = new TableColumn<>("Critical minimum Battery");
+        criticalMin.setMinWidth(100);
+        criticalMin.setCellValueFactory(new PropertyValueFactory<>("criticalMinBattery"));
 
 
         TableView<CarObject> table  = new TableView<>();
 
         table.setItems(getProduct(carList));
-        table.getColumns().addAll(carId, nameColumn, typeColumn, priceMin, priceMaxColumn, plugInTime, existTime, plugInDuration,chargingType,batteryLevel);
+        table.getColumns().addAll(carId, nameColumn, typeColumn, priceMin, priceMaxColumn, plugInTime, existTime, plugInDuration,chargingType,initialBattery,criticalMin,batteryLevel);
         return table;
     }
 
@@ -236,7 +244,7 @@ public class RandomGeneration {
         maxPriceInput.clear();*/
     }
 
-    public static void deleteRow(int index){
+    public static void deleteRow(){
 /*
 
         TableView.TableViewSelectionModel selectionModel = productsList.getSelectionModel();
@@ -245,7 +253,10 @@ public class RandomGeneration {
         Object val = tablePosition.getTableColumn().getCellData(newValue);
         System.out.println("Selected Value" + val);*/
 
-        System.out.println(index);
+        productsList.removeAll(carList);
+
+    }
+    public static void deleteAll(){
         productsList.removeAll(carList);
 
     }
@@ -322,7 +333,7 @@ public class RandomGeneration {
             car.setInitialBattery(Float.parseFloat(maxBattery.getText()));
             int index = car.getCarId();
         //    car.myData();
-            deleteRow(index);
+            deleteRow();
         //    addButtonClicked(car);
             window.close();
             display();

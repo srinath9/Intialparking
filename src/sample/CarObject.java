@@ -128,8 +128,8 @@ public class CarObject{
     public float getSellingPrice(){return this.sellingPrice;}
     public void printPlugInTime(){ System.out.println("Entry time is : "+plugInTime);}
     public void printExistTime(){System.out.println("Estimated outgoing time is : "+existTime );}
-    public Date getPlugInTime(){return this.plugInTime;}
-    public Date getExistTime(){return this.existTime;}
+    public Timestamp getPlugInTime(){return this.plugInTime;}
+    public Timestamp getExistTime(){return this.existTime;}
     public void setPlugInTime(Timestamp n){this.plugInTime = n;}
     public void setExistTime(Timestamp n){this.existTime =n;}
 

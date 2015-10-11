@@ -81,7 +81,13 @@ public class Main extends Application {
             System.out.println("asdkfjbsdfkbsd asfkufhsdiuf hsdiuf ");
             SettingPrice.buyingprice();
         });
-        transaction.setOnAction(e->RunTimeResult.magic());
+        transaction.setOnAction(e -> {
+            try {
+                RunTimeResult.magic();
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+        });
 
         sellingPrice.setOnAction(e-> SettingPrice.sellingPrice());
 
