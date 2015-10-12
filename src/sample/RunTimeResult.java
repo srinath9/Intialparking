@@ -2,7 +2,10 @@ package sample;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -29,9 +32,23 @@ public class RunTimeResult {
         Stage window = new Stage();
         Button close = new Button("close");
         close.setOnAction(e -> window.close());
+        TextField search = new TextField("4");
+        Label searchlabel = new Label("Give the Id number to see graph");
+        Button searchDeatilsButton = new Button("Show graph");
+        searchDeatilsButton.setOnAction(e -> {
+            int index = Integer.parseInt(search.getText());
+            GraphDisplay.graph(R1.getChargeArray(index),R1.getDisChargeArray(index),R1.getBatteryArray(index),index);
+
+        });
+        Button showAll = new Button("Show curves for all cars");
+        showAll.setOnAction(event -> {
+            for (int i=0; carList[i] != null;i++) GraphDisplay.graph(R1.getChargeArray(i),R1.getDisChargeArray(i),R1.getBatteryArray(i),i);
+        });
 
         VBox vBox = new VBox(10);
-        vBox.getChildren().addAll(table);
+        HBox hBox = new HBox(10);
+        hBox.getChildren().addAll(searchlabel,search,searchDeatilsButton,showAll);
+        vBox.getChildren().addAll(table,hBox);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
        // RandomGeneration.deleteRow();

@@ -7,6 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -63,6 +67,7 @@ public class Main extends Application {
         int i=0;
 
 
+
         button.setOnAction(e -> {
 
              /*carResult =*/
@@ -104,6 +109,8 @@ public class Main extends Application {
 
         window.setScene((scene1));
         window.setTitle("scene1");
+
+     //   graph();
         window.show();
 
 
@@ -114,7 +121,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 
 
 }

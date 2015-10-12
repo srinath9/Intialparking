@@ -171,6 +171,7 @@ public class RandomGeneration {
     }
 
     public static TableView<CarObject> tableDisplay(CarObject[] carList){
+        deleteAll();
         TableColumn<CarObject, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("carName"));
