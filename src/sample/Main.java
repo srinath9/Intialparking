@@ -83,16 +83,21 @@ public class Main extends Application {
         });
 
         buyingPrice.setOnAction(e->{
-            System.out.println("asdkfjbsdfkbsd asfkufhsdiuf hsdiuf ");
+          //  System.out.println("asdkfjbsdfkbsd asfkufhsdiuf hsdiuf ");
             SettingPrice.buyingprice();
         });
         transaction.setOnAction(e -> {
             try {
+
                 RunTimeResult.magic();
+
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
         });
+
+        Button powerDetailsButton = new Button("Graph of Power plants");
+        //powerDetailsButton.setOnAction(e-> GraphDisplay.powerInfoGraph());
 
         sellingPrice.setOnAction(e-> SettingPrice.sellingPrice());
 

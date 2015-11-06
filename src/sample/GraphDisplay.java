@@ -1,31 +1,34 @@
 package sample;
 
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.stage.Stage;
 
 /**
  * Created by srinath on 10/12/2015.
  */
 public class GraphDisplay {
+    static PowerPlant[] plants = RandomDetails.setPlantDetails();
 
-    public static void graph(float[] chargeArray, float[] disChargeArray,float[] batteryArray, int title) {
+    public static void userChargeGraph(float[] chargeArray, float[] disChargeArray,float[] batteryArray, int title, CarObject car) {
         Stage stage = new Stage();
-        stage.setTitle("Line Chart Sample of "+ title);
+        stage.setTitle("Line Chart Sample of " + title);
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
+
         xAxis.setLabel("Month");
         final LineChart<String,Number> lineChart =
                 new LineChart<String,Number>(xAxis,yAxis);
 
-        lineChart.setTitle("Stock Monitoring, 2010");
+        lineChart.setTitle("Car Charging and Discharging");
 
         XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Charging state");
-        for (int i=0;i<96;i++) series1.getData().add(new XYChart.Data(""+i, chargeArray[i]));
+        float sum = 0;
+        series1.setName("Money spent");
+        for (int i=0;i<96;i++){
+            sum += car.getSpentMoneyGraph()[i];
+            series1.getData().add(new XYChart.Data(""+i, sum));
+        }
 
 
         /*
@@ -42,51 +45,96 @@ public class GraphDisplay {
         series1.getData().add(new XYChart.Data("Dec", 25));*/
 
         XYChart.Series series2 = new XYChart.Series();
-        series2.setName("Discharging state ");
-        for (int i=0;i<96;i++) series2.getData().add(new XYChart.Data(""+i, disChargeArray[i]));
-     /*   series2.getData().add(new XYChart.Data("Jan", 33));
-        series2.getData().add(new XYChart.Data("Feb", 34));
-        series2.getData().add(new XYChart.Data("Mar", 25));
-        series2.getData().add(new XYChart.Data("Apr", 44));
-        series2.getData().add(new XYChart.Data("May", 39));
-        series2.getData().add(new XYChart.Data("Jun", 16));
-        series2.getData().add(new XYChart.Data("Jul", 55));
-        series2.getData().add(new XYChart.Data("Aug", 54));
-        series2.getData().add(new XYChart.Data("Sep", 48));
-        series2.getData().add(new XYChart.Data("Oct", 27));
-        series2.getData().add(new XYChart.Data("Nov", 37));
-        series2.getData().add(new XYChart.Data("Dec", 29));
-        */
+        series2.setName("Money Earned ");
+        float earn =  0;
+        for (int i=0;i<96;i++) {
+            earn +=car.getEarnedMoneyGraph()[i];
+            series2.getData().add(new XYChart.Data(""+i, earn));
+        }
 
         XYChart.Series series3 = new XYChart.Series();
         series3.setName("Battery Levels");
         for (int i=0;i<96;i++){
        //     System.out.print(" battery level : "+batteryArray[i] +"\t ");
             series3.getData().add(new XYChart.Data(""+i, batteryArray[i]));
-
         }
 
-        /*
-        series3.getData().add(new XYChart.Data("Jan", 44));
-        series3.getData().add(new XYChart.Data("Feb", 35));
-        series3.getData().add(new XYChart.Data("Mar", 36));
-        series3.getData().add(new XYChart.Data("Apr", 33));
-        series3.getData().add(new XYChart.Data("May", 31));
-        series3.getData().add(new XYChart.Data("Jun", 26));
-        series3.getData().add(new XYChart.Data("Jul", 22));
-        series3.getData().add(new XYChart.Data("Aug", 25));
-        series3.getData().add(new XYChart.Data("Sep", 43));
-        series3.getData().add(new XYChart.Data("Oct", 44));
-        series3.getData().add(new XYChart.Data("Nov", 45));
-        series3.getData().add(new XYChart.Data("Dec", 44));
-        */
 
         Scene scene  = new Scene(lineChart,800,600);
-        lineChart.getData().addAll(series1, series2 ,series3);
+        lineChart.getData().addAll(series3,series1,series2);
 
         stage.setScene(scene);
         stage.show();
     }
+
+    public  static void companyProfitGraph(CompanyProfit[]  companyDetails){
+        Stage stage = new Stage();
+        stage.setTitle( "Company profits");
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Month");
+        final LineChart<String,Number> lineChart =
+                new LineChart<String,Number>(xAxis,yAxis);
+
+        lineChart.setTitle("Company Details Monitoring");
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Company Profits");
+        float profit = 0;
+        for (int i=0;i<96;i++){
+            profit +=  companyDetails[i].getProfit();
+            series1.getData().add(new XYChart.Data(""+i,profit));
+        }
+
+        Scene scene  = new Scene(lineChart,800,600);
+        lineChart.getData().addAll(series1);
+
+        stage.setScene(scene);
+        stage.show();
+
+
+    }
+
+    public static void powerInfoGraph(PowerPlant[] plant){
+        Stage stage = new Stage();
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final LineChart<String,Number> lineChart = new LineChart<String,Number>(xAxis,yAxis);
+
+        final StackedBarChart<String, Number> sbc = new StackedBarChart<String, Number>(xAxis, yAxis);
+        BarChart<String,Number> bc = new BarChart<String,Number>(xAxis,yAxis);
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("Initial Energy Available ");
+        for (int i =0;i<96;i++) series1.getData().add(new XYChart.Data(""+i, plant[i].getInitialEnergy()));
+
+        XYChart.Series series3 = new XYChart.Series();
+        series3.setName("Final Energy Available ");
+        for (int i=0;i<96;i++) series3.getData().add(new XYChart.Data(""+i, plant[i].getEnergyAvailable()));
+
+
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName("price Set ");
+
+        //Transaction.printPowerPlant();
+        for (int i = 0; i < 96;i++){
+            series2.getData().add(new XYChart.Data(""+i, plant[i].getPrice()));
+        }
+
+        bc.setTitle("Power Monitoring");
+
+        Scene scene  = new Scene(lineChart,800,600);
+
+        lineChart.getData().addAll(series1, series3,series2 );
+
+
+        stage.setScene(scene);
+        stage.show();
+
+
+    }
+
+
 
 
 }

@@ -11,8 +11,13 @@ public class CarObject{
     private int carId;
     private String chargingType;
     private float batteryLevel;
+    private float moneyEarned;
+    private float moneyRequired;
+    private float[] spentMoneyGraph = new float[96];
+    private float[] earnedMoneyGraph = new float[96];
+    private float chargingRate;
+    private float disChargingRate;
 
-    
     private boolean active;
     public String type;
 
@@ -41,6 +46,10 @@ public class CarObject{
         this.plugInTime = null;
         this.plugInDuration = (float) 0.0;
         this.batteryLevel = this.initialBattery;
+        this.moneyEarned = 0;
+        this.moneyRequired = 0;
+        this.disChargingRate = 0;
+        this.chargingRate = 0;
 
     }
     public CarObject(String name, String cartype,  float buyPrice, float sellingPrice) {
@@ -56,6 +65,11 @@ public class CarObject{
         this.chargingType = "slow";
         this.batteryLevel = this.initialBattery;
         this.carId = 1;
+        this.moneyEarned =0;
+        this.moneyRequired = 0;
+        this.disChargingRate = 0;
+        this.chargingRate = 0;
+
     }
 
     public CarObject(String name, String cartype,  float buyPrice, float sellingPrice, Timestamp plugInTime, Timestamp ExistTime) {
@@ -72,10 +86,15 @@ public class CarObject{
         this.chargingType = "slow";
         this.carId = 1;
         this.batteryLevel = this.initialBattery;
+        this.moneyEarned =0;
+        this.moneyRequired = 0;
+        this.disChargingRate = 0;
+        this.chargingRate = 0;
+
     }
 
 
-    public CarObject(String name, String cartype, Float buyPrice, Float sellingPrice, Timestamp plugInTime, Timestamp ExistTime,Float initialBattery, Float criticalMinBattery, String chargeType) {
+    public CarObject(String name, String cartype, Float buyPrice, Float sellingPrice, Timestamp plugInTime, Timestamp ExistTime,Float initialBattery, Float criticalMinBattery, String chargeType,Float chargingRate, Float disChargingRate) {
         this.carName = name;
         this.type = cartype;
         // this.price = (float) 0.0;
@@ -89,6 +108,12 @@ public class CarObject{
         this.chargingType = chargeType;
         this.batteryLevel = this.initialBattery;
         this.carId = 1;
+        this.moneyEarned =0;
+        this.moneyRequired = 0;
+        this.disChargingRate = disChargingRate ;
+        this.chargingRate = chargingRate;
+
+
 
     }
 
@@ -99,9 +124,16 @@ public class CarObject{
 
     public void setCarName(String name){ this.carName = name;}
 
-    public Boolean activity(){
-        return this.active;
-    }
+    public float getMoneyEarned(){return this.moneyEarned;}
+    public void addMoneyEarned(float n){this.moneyEarned += n;}
+
+    public float getMoneyRequired(){return this.moneyRequired;}
+    public void addMoneyRequired(float n){this.moneyRequired +=n;}
+    public float[] getSpentMoneyGraph(){return this.spentMoneyGraph;}
+    public float[] getEarnedMoneyGraph(){return this.earnedMoneyGraph;}
+
+    public void addSpentMoneyGraph(float n, int id){this.spentMoneyGraph[id] =n; }
+    public void addEarnedMoneyGraph(float n, int id){this.earnedMoneyGraph[id] =n; }
 
     public Float getCriticalMinBattery(){return this.criticalMinBattery;}
     public void setCriticalMinBattery(float n){this.criticalMinBattery = n;}
@@ -139,6 +171,10 @@ public class CarObject{
 
     public int getCarId(){return this.carId;}
     public void setCarId(int n){this.carId = n;}
+
+    public float getChargingRate(){return  this.chargingRate;}
+    public float getDisChargingRate(){return this.disChargingRate;}
+
 
 
 }

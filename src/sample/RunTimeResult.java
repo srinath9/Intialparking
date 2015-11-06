@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,6 +22,7 @@ public class RunTimeResult {
         R1.run();
 
 
+
         Transaction R2 = new Transaction( "Discharging");
         //R2.start();
 
@@ -37,18 +40,42 @@ public class RunTimeResult {
         Button searchDeatilsButton = new Button("Show graph");
         searchDeatilsButton.setOnAction(e -> {
             int index = Integer.parseInt(search.getText());
-            GraphDisplay.graph(R1.getChargeArray(index),R1.getDisChargeArray(index),R1.getBatteryArray(index),index);
-
+            GraphDisplay.userChargeGraph(R1.getChargeArray(index), R1.getDisChargeArray(index), R1.getBatteryArray(index), index,carList[index]);
         });
         Button showAll = new Button("Show curves for all cars");
-        showAll.setOnAction(event -> {
-            for (int i=0; carList[i] != null;i++) GraphDisplay.graph(R1.getChargeArray(i),R1.getDisChargeArray(i),R1.getBatteryArray(i),i);
+        Button powerInfo = new Button("Get Graph of Plant price and energy");
+
+        powerInfo.setOnAction(event1 -> {
+
         });
+        showAll.setOnAction(event -> {
+            for (int i=0; carList[i] != null;i++) GraphDisplay.userChargeGraph(R1.getChargeArray(i), R1.getDisChargeArray(i), R1.getBatteryArray(i),i,carList[i]);
+        });
+        CompanyProfit[] companyDetails = R1.getCompanyDetails();
+
+        Button companyProfitsButton = new Button("Graph of profits");
+        companyProfitsButton.setOnAction(event -> {
+
+            GraphDisplay.companyProfitGraph(companyDetails);
+        });
+        Button powerPLant = new Button("Power Plant Details");
+        powerPLant.setOnAction(event -> {
+            GraphDisplay.powerInfoGraph(R1.getPowerPlants());
+        });
+
+        Button spentMoneyButton = new Button("Spent Money Graph");
+
 
         VBox vBox = new VBox(10);
         HBox hBox = new HBox(10);
-        hBox.getChildren().addAll(searchlabel,search,searchDeatilsButton,showAll);
-        vBox.getChildren().addAll(table,hBox);
+        HBox hBox1 = new HBox(10);
+        hBox.getChildren().addAll(searchlabel,search,searchDeatilsButton);
+        hBox1.getChildren().addAll(showAll, companyProfitsButton,powerPLant);
+        hBox.setAlignment(Pos.CENTER);
+        hBox1.setAlignment(Pos.CENTER);
+        hBox.setPadding(new Insets(0, 10, 0, 12));
+        hBox1.setPadding(new Insets(0, 10, 10, 12));
+        vBox.getChildren().addAll(table,hBox,hBox1);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
        // RandomGeneration.deleteRow();

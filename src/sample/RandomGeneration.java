@@ -223,11 +223,26 @@ public class RandomGeneration {
         criticalMin.setMinWidth(100);
         criticalMin.setCellValueFactory(new PropertyValueFactory<>("criticalMinBattery"));
 
+        TableColumn<CarObject, Float> moneyEarned = new TableColumn<>("Money Earned");
+        moneyEarned.setMinWidth(100);
+        moneyEarned.setCellValueFactory(new PropertyValueFactory<>("moneyEarned"));
+
+        TableColumn<CarObject, Float> spentMoney = new TableColumn<>("Money Spent");
+        spentMoney.setMinWidth(100);
+        spentMoney.setCellValueFactory(new PropertyValueFactory<>("moneyRequired"));
+
+        TableColumn<CarObject, Float> chargeRate = new TableColumn<>("Charge Rate");
+        chargeRate.setMinWidth(100);
+        chargeRate.setCellValueFactory(new PropertyValueFactory<>("chargingRate"));
+
+        TableColumn<CarObject, Float> disChargeRate = new TableColumn<>("Discharge Rate");
+        disChargeRate.setMinWidth(100);
+        disChargeRate.setCellValueFactory(new PropertyValueFactory<>("disChargingRate"));
 
         TableView<CarObject> table  = new TableView<>();
 
         table.setItems(getProduct(carList));
-        table.getColumns().addAll(carId, nameColumn, typeColumn, priceMin, priceMaxColumn, plugInTime, existTime, plugInDuration,chargingType,initialBattery,criticalMin,batteryLevel);
+        table.getColumns().addAll(carId, nameColumn, typeColumn, priceMin, priceMaxColumn, plugInTime, existTime, plugInDuration,chargingType,initialBattery,criticalMin,batteryLevel,moneyEarned,spentMoney,chargeRate,disChargeRate);
         return table;
     }
 

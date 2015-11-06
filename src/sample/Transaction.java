@@ -26,6 +26,8 @@ public class Transaction  {
     public static float[][] chargeArray = new float[100][96];
     public static float[][] disChargeArray = new float[100][96];
     public static float[][] batteryArray = new float[100][96];
+    private static CompanyProfit[] companyDetails =RandomDetails.companyDetails();
+
 
     Transaction( String name){
         threadName = name;
@@ -51,6 +53,7 @@ public class Transaction  {
     public float[] getDisChargeArray(int n){ return disChargeArray[n];}
     public float[] getChargeArray(int n){return chargeArray[n];}
     public float[] getBatteryArray(int n){return batteryArray[n];}
+    public float[] getGraphSpentMoney(int id) {return car[id].getSpentMoneyGraph();}
 
     private void chargeCar()  {
         Timestamp presentTime;
@@ -65,12 +68,23 @@ public class Transaction  {
             System.out.println(presentTime);
            /* setUserBuying(powerPlants[i].getPrice(),presentTime,buyArray);*/
             setUserBuying(powerPlants[i],buyArray,chargeArray);
-            setUserSelling(powerPlants[i],sellArray,disChargeArray);
+            setUserSelling(powerPlants[i], sellArray, disChargeArray);
+          //  printPowerPlant();
                 //    System.out.println(" i :"+i);
 
             }
         //GraphDisplay.graph(chargeArray[1],disChargeArray[1],batteryArray[1]);
         System.out.println(" exist charging");
+    }
+
+    public PowerPlant[] getPowerPlants(){
+        return powerPlants;
+    }
+
+    public static void printPowerPlant(){
+        for (int i =0;i<96;i++){
+            System.out.println("Power Plant details : i :"+i +" :"+powerPlants[i].getInitialEnergy() + " : "+ powerPlants[i].getEnergyAvailable());
+        }
     }
 
     private void setUserSelling(PowerPlant plant, int[] sellArray, float[][] disChargeArray){
@@ -85,7 +99,7 @@ public class Transaction  {
 
                 float temp = carList[i].getBatteryLevel() - carList[i].getCriticalMinBattery();
                 if (validTime(carList[i], timeSlot)) {
-                    System.out.println("valid Time");
+                //    System.out.println("valid Time");
                     userSellEnergyAvailability(carList[i], plant,disChargeArray[i],batteryArray[i]);
                     System.out.println("selling i  : " + i + " : " + carList[i].getBatteryLevel() + " battery : " + carList[i].getCriticalMinBattery());
                 }
@@ -108,9 +122,9 @@ public class Transaction  {
                 if (validTime(carList[i], timeSlot)) {
                   //  System.out.println("valid Time");
                    // System.out.println("buying i : " + i + " : " + carList[i].getBatteryLevel() + " battery : " + carList[i].getCriticalMinBattery());
-                    if (carList[i].getBuyPrice() > priceLevel) {
+                    if (carList[i].getBuyPrice() > priceLevel*1.1) {
                         System.out.println("buying i  : " + i + " : " + carList[i].getBatteryLevel() + " battery : " + carList[i].getCriticalMinBattery());
-                        userBuyEnergyAvailability(carList[i],plant,chargeArray[i],batteryArray[i]);
+                        userBuyEnergyAvailability(carList[i], plant, chargeArray[i], batteryArray[i]);
                         System.out.println("buying i  : " + i + " : " + carList[i].getBatteryLevel() + " battery : " + carList[i].getCriticalMinBattery());
                        /* if (carList[i].getChargingType() == "slow") {
                             //  System.out.print("buying i : " + i + " : " + carList[i].getBatteryLevel() + "\t");
@@ -137,55 +151,126 @@ public class Transaction  {
         System.out.println("");
     }
 
-    private void userBuyEnergyAvailability(CarObject car,PowerPlant plant, float[] chargeArray,float[] batterycharge){
+    private void userBuyEnergyAvailability(CarObject car,PowerPlant plant, float[] chargeArray,float[] batterycharge) {
         float energy = plant.getEnergyAvailable();
         int id = plant.getId();
-        if(car.getChargingType() == "slow") {
-            if (energy >= 5) {
-                if (car.getBatteryLevel() < 95) {
-                    System.out.println("plant energy available is " + energy);
+        float remaining= 100-car.getChargingRate();
+        if (car.getChargingType() == "slow") {
+            if (energy >= car.getChargingRate()) {
+                if (car.getBatteryLevel() < remaining) {
+                    System.out.println("plant energy available is " +  plant.getId()+ " : "+energy);
                     car.setAddCharge(5);
                     plant.disChargeEnergy(5);
                     chargeArray[id] = 5;
 
-                    System.out.println("plant energy available is " + plant.getEnergyAvailable());
+                    System.out.println("plant energy available is " + plant.getId()+ " : "+ plant.getEnergyAvailable() );
+                    companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice());
+                    car.addMoneyRequired((float) (plant.getPrice() * 1.1));
+                    car.addSpentMoneyGraph((float) (plant.getPrice() * 1.1), id);
                     //             System.out.println("buying i : "  + " : " + car.getSellingPrice() + " : " + car.getBatteryLevel());
                 } else {
                     System.out.println("plant energy available is " + energy);
-                    plant.disChargeEnergy(car.getBatteryLevel() - 95);
-                    chargeArray[plant.getId()] = car.getBatteryLevel() - 95;
+                    plant.disChargeEnergy(car.getBatteryLevel() - remaining);
+                    chargeArray[plant.getId()] = car.getBatteryLevel() - remaining;
                     car.setBatteryLevel(100);
+                    companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * chargeArray[plant.getId()] / car.getChargingRate());
+                    car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                    car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 /car.getChargingRate()), id);
 
                 }
 
 
-            } else if ((energy > 0) && (energy < 5)) {
-                System.out.println("plant energy available is " + energy);
-                System.out.println("plant energy available is  completelety zero             ");
-                car.setAddCharge(energy);
-                chargeArray[plant.getId()] = plant.getEnergyAvailable();
-                plant.setEnergyAvailable(0);
+            } else if (energy < car.getChargingRate()) {
+                if (energy > 0) {
+                    if (car.getBatteryLevel() < remaining) {
+                        System.out.println("plant energy available is " + energy);
+                        car.setAddCharge(energy);
+                        plant.disChargeEnergy(energy);
+                        chargeArray[id] = energy;
+
+                        System.out.println("plant energy available is " + plant.getEnergyAvailable());
+                        companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * energy / car.getChargingRate());
+                        car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                        car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                        //             System.out.println("buying i : "  + " : " + car.getSellingPrice() + " : " + car.getBatteryLevel());
+                    } else {
+                        System.out.println("plant energy available is " + energy);
+                        if (remaining > energy) {
+                            plant.disChargeEnergy(energy);
+                            chargeArray[plant.getId()] = energy;
+                            car.setAddCharge(energy);
+                            companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * chargeArray[plant.getId()] / car.getChargingRate());
+                            car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                            car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                        } else {
+                            plant.disChargeEnergy(remaining);
+                            chargeArray[plant.getId()] = remaining;
+                            car.setAddCharge(chargeArray[plant.getId()]);
+                            companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * chargeArray[plant.getId()] / car.getChargingRate());
+                            car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                            car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                        }
+
+
+                    }
+
+                }
+
+            }
+          //  companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * chargeArray[plant.getId()] / 5);
+        }
+        else if (car.getChargingType() == "fast") {
+            if (energy >= car.getChargingRate()) {
+                if (car.getBatteryLevel() < remaining) {
+                    plant.disChargeEnergy(car.getChargingRate());
+                    car.setAddCharge(car.getChargingRate());
+                    chargeArray[plant.getId()] = car.getChargingRate();
+                    companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * 8);
+                    car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                    car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                } else {
+                    plant.disChargeEnergy(100-car.getBatteryLevel() );
+                    chargeArray[plant.getId()] = 100 -car.getBatteryLevel() ;
+                    car.setBatteryLevel(100);
+                    companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * chargeArray[plant.getId()] * 8);
+                    car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                    car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+
+                }
+            } else if ((energy < car.getChargingRate())) {
+                if (energy > 0) {
+                    if (car.getBatteryLevel() < remaining) {
+                        car.setAddCharge(energy);
+                        chargeArray[plant.getId()] = energy;
+                        plant.setEnergyAvailable(0);
+                        companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * 8 * chargeArray[plant.getId()] / car.getChargingRate());
+                        car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                        car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                    } else {
+                        System.out.println("plant energy available is " + energy);
+                        if (100-car.getBatteryLevel()  > energy) {
+                            plant.disChargeEnergy(energy);
+                            chargeArray[plant.getId()] = energy;
+                            car.setAddCharge(energy);
+                            companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * 8 * chargeArray[plant.getId()] / car.getChargingRate());
+                            car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                            car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                        } else {
+                            plant.disChargeEnergy(100-car.getBatteryLevel() );
+                            chargeArray[plant.getId()] =100- car.getBatteryLevel();
+                            car.setAddCharge(chargeArray[plant.getId()]);
+                            companyDetails[id].addCompanyProfit((float) 0.1 * plant.getPrice() * 8 * chargeArray[plant.getId()] / car.getChargingRate());
+                            car.addMoneyRequired((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()));
+                            car.addSpentMoneyGraph((float) (plant.getPrice() * chargeArray[plant.getId()] * 1.1 / car.getChargingRate()), id);
+                        }
+                    }
+                }
 
             }
         }
-        else if(car.getChargingType() == "fast"){
-            if (energy  >= 40) {
-                plant.disChargeEnergy(40);
-                car.setAddCharge(40);
-                chargeArray[plant.getId()] = 40;
-
-            }
-            else if ((energy >0) && (energy < 40) ) {
-                car.setAddCharge(energy);
-                chargeArray[plant.getId()] = energy;
-                plant.setEnergyAvailable(0);
-
-                }
-            }
-
         batterycharge[id] = car.getBatteryLevel();
-
     }
+
 
     private void userSellEnergyAvailability(CarObject car,PowerPlant plant, float[] disChargeArray,float[] batterycharge) {
         float priceLevel = plant.getPrice();
@@ -193,19 +278,30 @@ public class Transaction  {
 
         //for (int i = 0; i<96;i++) System.out.print(disChargeArray[i]+"\t");
         float temp = car.getBatteryLevel() - car.getCriticalMinBattery();
-        if (car.getSellingPrice() < priceLevel) {
+        if (car.getSellingPrice() < priceLevel*0.9) {
             if (temp > 5) {
                 System.out.println("valid selling i : " +car.getCarId()  + " : " + car.getBatteryLevel() + " battery : " + car.getCriticalMinBattery());
-                if (car.getBatteryLevel() > 5) {
-                    car.setDisCharge(5);
-                    disChargeArray[slotnum] = -5;
-
+                if (car.getBatteryLevel() > car.getDisChargingRate()) {
+                    car.setDisCharge(car.getDisChargingRate());
+                    disChargeArray[slotnum] = -car.getDisChargingRate();
+                    companyDetails[slotnum].addCompanyProfit((float) 0.1 * plant.getPrice());
+                    car.addMoneyEarned((float) (plant.getPrice() * 0.9));
+                    car.addEarnedMoneyGraph((float) ( plant.getPrice() *0.9),slotnum);
                  //   System.out.println("selling i : " + i + " : " + car.getBuyPrice() + " : " + car.getBatteryLevel());
-                } else car.setBatteryLevel(0);
-            } else if (temp > 0 && temp < 5) {
-                System.out.println("valid selling less amount i : " +car.getCarId()  + " : " + car.getBatteryLevel() + " battery : " + car.getCriticalMinBattery());
-                car.setBatteryLevel(car.getCriticalMinBattery());
-                disChargeArray[slotnum] = -temp;
+                } else{
+                    car.setBatteryLevel(0);
+                    //car.addEarnedMoneyGraph((float) (plant.getPrice() * 0.9) * temp / 5, slotnum);
+                    //car.addMoneyEarned( (float) ( plant.getPrice() *temp*0.9/5));
+                }
+            } else if ( temp < car.getDisChargingRate()) {
+                if (temp >0) {
+                    System.out.println("valid selling less amount i : " + car.getCarId() + " : " + car.getBatteryLevel() + " battery : " + car.getCriticalMinBattery());
+                    car.setBatteryLevel(car.getCriticalMinBattery());
+                    disChargeArray[slotnum] = -temp;
+                    companyDetails[slotnum].addCompanyProfit((float) 0.1 * plant.getPrice() * temp / car.getDisChargingRate());
+                    car.addMoneyEarned( (float) ( plant.getPrice() *temp*0.9/car.getDisChargingRate()));
+                    car.addEarnedMoneyGraph((float) ( plant.getPrice()*temp*0.9/car.getDisChargingRate()),slotnum);
+                }
             }
         }
         batterycharge[slotnum] = car.getBatteryLevel();
@@ -225,16 +321,24 @@ public class Transaction  {
     }
 
     private boolean validTime(CarObject car, Timestamp t1){
+        boolean valid = true;
         if (car.getPlugInTime().getTime() < t1.getTime()) {
-          //  System.out.println("prop time");
-            if (car.getExistTime().getTime() > t1.getTime()) return true;
+          //  System.out.println("prop time entry ");
+            if (car.getExistTime().getTime() > t1.getTime()) {
+       //         System.out.println("prop time exist");
+
+            }
+            else{
+          //      System.out.println("else Time exist");
+                valid = false;
+            }
         }
         else{
-          //  System.out.println("else Time");
-            return false;
+         //   System.out.println("else Time entry");
+            valid = false;
         }
 
-        return true;
+        return valid;
     }
 
 
@@ -308,6 +412,15 @@ public class Transaction  {
         for (int j=0; j< num;j++)  System.out.print(sellArray[j]+"\t");
 
         return sellArray;
+    }
+
+    public static PowerPlant[] plantDetails(){
+
+        return powerPlants;
+    }
+
+    public static CompanyProfit[] getCompanyDetails(){
+        return companyDetails;
     }
 
 

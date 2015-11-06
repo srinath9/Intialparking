@@ -11,6 +11,8 @@ public class RandomDetails {
     static Random buyingPrice = new Random();
     static  Random stayTime = new Random();
     static  Random entryTime = new Random();
+    static Random chargingRate = new Random();
+    static Random disChargeRate = new Random();
 
     //   batterylabel.setText("Present Parking lot purchase Price is : " + sellvalue);
 
@@ -21,6 +23,8 @@ public class RandomDetails {
         for (; j < 10; j++) {
             double buy = buyingPrice.nextGaussian() * 1.5 + 4;
             double sell = sellingPrice.nextGaussian() * 1.5 + 3;
+
+
 
             while ( buy <0 || sell <0 || buy > sell){
                 buy = buyingPrice.nextGaussian() * 1.5 + 4;
@@ -53,15 +57,35 @@ public class RandomDetails {
             int stay = (int) (val);
             int entry = (int) (entryTime.nextGaussian() * 3000000 + 26100000);   //mean 7 hr 45min  std is 50min
 
+            double charge ;
+            double disCharge;
+            do{
+                charge = chargingRate.nextFloat() *4 +6;
+                System.out.println("charge"+charge);
+            }while(charge < 2);
 
+            do {
+                    disCharge = disChargeRate.nextFloat() * 4 + 5;
+                    System.out.println("discharge"+disCharge);
+            }while (disCharge <4);
 
             java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime() + entry);
 
-            java.sql.Timestamp t2 = new java.sql.Timestamp(calendar.getTime().getTime() + stay);
+            java.sql.Timestamp t2 = new java.sql.Timestamp(t1.getTime() + stay);
            /* carList[j].setPlugInTime(t1);
             carList[j].setExistTime(t2);*/
+            int rand = (j*17 +39)%5 ;
 
-            carList[j] = new CarObject(RandomClass.stringValue(), "Both", (float) buy, (float) sell,t1,t2,intialBat,criticalBat,"slow");
+            if (rand == 2) {                     // generating random fast charging car
+                while(charge < 20){
+                    charge = chargingRate.nextFloat() *20 +30;
+                }
+                carList[j] = new CarObject(RandomClass.stringValue(), "Both", (float) buy, (float) sell, t1, t2, intialBat, criticalBat, "fast",(float) charge,(float) disCharge);
+            }
+            else {
+                carList[j] = new CarObject(RandomClass.stringValue(), "Both", (float) buy, (float) sell, t1, t2, intialBat, criticalBat, "slow", (float) charge, (float) disCharge);
+
+            }
           /*  long diffInMinutes = (stay - entry)/60000;
             System.out.println(diffInMinutes+ " :   "+(val)/3600000);*/
             carList[j].setPlugInDuration((float) (val / 3600000));
@@ -82,10 +106,9 @@ public class RandomDetails {
         float sell ;
 
         while (slot<96){
-            sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
-            while (sell <0){
+            do{
                 sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
-            }
+            }while (sell <2.5);
 
             Random energy = new Random();
             float available = energy.nextFloat()*80;
@@ -97,5 +120,12 @@ public class RandomDetails {
         System.out.println("");
 
         return powerPlants;
+    }
+
+    public static CompanyProfit[] companyDetails(){
+        CompanyProfit[] companyDetails = new CompanyProfit[100];
+        for (int i=0; i<96 ;i++)   companyDetails[i] = new CompanyProfit(i,(float) 1.1 * setPlantDetails()[i].getPrice(),(float) 0.9 * setPlantDetails()[i].getPrice());
+
+        return companyDetails;
     }
 }

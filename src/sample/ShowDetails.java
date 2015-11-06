@@ -136,9 +136,11 @@ public class ShowDetails {
                 Float intialBattery = rs.getFloat("minPrice");
                 Float criticalBattery = rs.getFloat("criticalBattery");
                 Float batteryAdd = rs.getFloat("batteryLeveltoAdd");
+                Float chargeRate = rs.getFloat(("chargeRate"));
+                Float disChargeRate = rs.getFloat(("disChargeRate"));
 
         //        System.out.format("%s, %s, %s %s %s %s, %s %s\n", id, carType, carName, minPrice, criticalBattery, batteryAdd,existTime , entryTime);
-                savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,existTime,intialBattery,criticalBattery,"slow");
+                savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,existTime,intialBattery,criticalBattery,"slow",chargeRate,disChargeRate);
                 i=i+1;
 
             }
@@ -263,8 +265,10 @@ public class ShowDetails {
                     Float maxPrice = rs.getFloat("maxPrice");
                     Float initialBattery = rs.getFloat("batteryIntial");
                     Float criticalBattery = rs.getFloat("batteryCriticalMin");
+                    Float chargeRate = rs.getFloat(("chargeRate"));
+                    Float disChargeRate = rs.getFloat(("disChargeRate"));
                     
-                    savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,stayTime,initialBattery,criticalBattery,"slow");
+                    savesList[i] = new CarObject(carName,carType,minPrice,maxPrice,entryTime,stayTime,initialBattery,criticalBattery,"slow",chargeRate,disChargeRate);
                     i=i+1;
 
                 }
