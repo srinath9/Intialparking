@@ -125,8 +125,8 @@ public class UserInfo {
 
         window.initModality(Modality.APPLICATION_MODAL);
     //    window.setTitle(title);
-        window.setMinWidth(500);
-        window.setMinHeight(500);
+        window.setMinWidth(400);
+        window.setMinHeight(400);
 
 
         TextField carname = new TextField(""+car.getCarName());
@@ -139,7 +139,7 @@ public class UserInfo {
         Label maxBatterylabel = new Label("Critical Battery level");
 
         Label typelabel = new Label();
-        carlabel.setText("give the name");
+        carlabel.setText("User Name");
 
 
         final ToggleGroup group = new ToggleGroup();
@@ -151,8 +151,8 @@ public class UserInfo {
         rb2.setToggleGroup(group);
         rb3.setToggleGroup(group);
 
-        Label minPricelabel = new Label("set the min price below to start charge");
-        Label maxPricelabel = new Label("Set the max prices value above which you want to sell");
+        Label minPricelabel = new Label("Give Minimum Price to Charge");
+        Label maxPricelabel = new Label("Give Maximum Price to Discharge");
 
 
         TextField minPrice = new TextField(""+car.getBuyPrice());
@@ -244,8 +244,10 @@ public class UserInfo {
 
         layout7.getChildren().addAll(hb1, typelabel, hb);
         layout7.setAlignment(Pos.CENTER);
+        hb2.getChildren().addAll(yes,close);
+        hb2.setAlignment(Pos.CENTER);
 
-        layout.getChildren().addAll( layout7, layout5, layout4, yes, close);
+        layout.getChildren().addAll( layout7, layout5, layout4,hb2);
         Scene scene = new Scene(layout);
         window.setTitle("Adding from Seller");
 

@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  */
 public class RunTimeResult {
     static TableView table;
-    public static void magic() throws InterruptedException {
+    public static void simulate() throws InterruptedException {
 
         Transaction R1 = new Transaction( "Charging");
         R1.run();

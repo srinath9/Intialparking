@@ -32,8 +32,8 @@ public class SettingPrice {
         Button closeButton = new Button("close the widow");
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(500);
-        window.setMinHeight(500);
+        window.setMinWidth(400);
+        window.setMinHeight(300);
 
         ComboBox<String> comboBox;
         TextField carname = new TextField();
@@ -45,8 +45,8 @@ public class SettingPrice {
         final float sellvalue = RandomClass.sellingPrice();
         Label selllabel = new Label("this is the selling price available now : "+ sellvalue);
 
-        Label minPricelabel = new Label("set the min price below to start charge");
-        Label maxPricelabel = new Label("Set the max prices value above which you want to sell");
+        Label minPricelabel = new Label("Give Minimum Price to Charge");
+        Label maxPricelabel = new Label("Give Maximum Price to Discharge");
 
         float minvalue = (float) RandomClass.integerValue(0);
 
@@ -59,7 +59,7 @@ public class SettingPrice {
         batterylabel.setText("Present Parking lot purchase Price is : " + sellvalue);
 
         Button yes = new Button("Sell ");
-        Button no = new Button("Dont sell");
+        Button no = new Button("Cancel");
 
         no.setOnAction(e-> window.close());
 

@@ -39,8 +39,8 @@ public class NewCar/*extends StringConverter<String>*/  {
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
-        window.setMinWidth(500);
-        window.setMinHeight(500);
+        window.setMinWidth(400);
+        window.setMinHeight(400);
 
         ComboBox<String> comboBox;
         TextField carname = new TextField();
@@ -58,9 +58,9 @@ public class NewCar/*extends StringConverter<String>*/  {
         Label batterylabel = new Label();
         Label addBatteryLabel = new Label();
         Label typelabel = new Label();
-        carlabel.setText("give the name");
-        batterylabel.setText("minimum battery level");
-        addBatteryLabel.setText("required ammount of battery");
+        carlabel.setText("User Name");
+        batterylabel.setText("Present Battery Level" );
+        addBatteryLabel.setText("Critical Amount of Battery");
 
 
 
@@ -88,7 +88,7 @@ public class NewCar/*extends StringConverter<String>*/  {
 
        /* comboBox.setOnAction(e -> System.out.print(comboBox.getValue()));*/
         Button yes = new Button("Go to add price preference");
-        Button close = new Button("Close");
+        Button close = new Button("Cancel");
         close.setOnAction(e-> window.close());
         /*Button no = new Button("NO");*/
 
@@ -131,7 +131,7 @@ public class NewCar/*extends StringConverter<String>*/  {
 
 
         Label label1 = new Label();
-        label1.setText(message);
+       // label1.setText(message);
         VBox layout = new VBox(10);
         HBox hb = new HBox(10);
         HBox hb1 = new HBox(10);
@@ -157,11 +157,13 @@ public class NewCar/*extends StringConverter<String>*/  {
         carname.setMaxWidth(100);
         batterylife.setMaxWidth(100);
         addBattery.setMaxWidth(100);
-        layout.getChildren().addAll(label1, hb1, typelabel, hb,yes,close);
+        hb2.getChildren().addAll(yes,close);
+        hb2.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll( hb1, typelabel, hb,hb2);
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
-        window.setTitle("new title");
+        window.setTitle("User Details");
         window.setScene(scene);
         window.showAndWait();
 

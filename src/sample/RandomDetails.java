@@ -57,17 +57,10 @@ public class RandomDetails {
             int stay = (int) (val);
             int entry = (int) (entryTime.nextGaussian() * 3000000 + 26100000);   //mean 7 hr 45min  std is 50min
 
-            double charge ;
-            double disCharge;
-            do{
-                charge = chargingRate.nextFloat() *4 +6;
-                System.out.println("charge"+charge);
-            }while(charge < 2);
+            double charge = chargingRate.nextFloat() *4 +6;
+            double disCharge = disChargeRate.nextFloat()*4+5;
 
-            do {
-                    disCharge = disChargeRate.nextFloat() * 4 + 5;
-                    System.out.println("discharge"+disCharge);
-            }while (disCharge <4);
+
 
             java.sql.Timestamp t1 = new java.sql.Timestamp(calendar.getTime().getTime() + entry);
 
@@ -79,11 +72,32 @@ public class RandomDetails {
             if (rand == 2) {                     // generating random fast charging car
                 while(charge < 20){
                     charge = chargingRate.nextFloat() *20 +30;
+
+                }
+                System.out.println("charge"+charge);
+                while (disCharge <4){
+                    if (disCharge < 0) {
+                        disCharge = disChargeRate.nextFloat() * 4 + 5;
+
+                    }
+                    System.out.println("discharge"+disCharge);
                 }
                 carList[j] = new CarObject(RandomClass.stringValue(), "Both", (float) buy, (float) sell, t1, t2, intialBat, criticalBat, "fast",(float) charge,(float) disCharge);
             }
             else {
+                while(charge < 2){
+                    charge = chargingRate.nextFloat() *4 +6;
+                    System.out.println("charge"+charge);
+                }
+                while (disCharge <4){
+                    if (disCharge < 0) {
+                        disCharge = disChargeRate.nextFloat() * 4 + 5;
+                        System.out.println("discharge"+disCharge);
+                    }
+                }
                 carList[j] = new CarObject(RandomClass.stringValue(), "Both", (float) buy, (float) sell, t1, t2, intialBat, criticalBat, "slow", (float) charge, (float) disCharge);
+
+
 
             }
           /*  long diffInMinutes = (stay - entry)/60000;
@@ -106,9 +120,10 @@ public class RandomDetails {
         float sell ;
 
         while (slot<96){
-            do{
+            sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
+            while (sell <0){
                 sell = (float) ((sellingPrice.nextGaussian() * 2 + 3)*1.1);
-            }while (sell <2.5);
+            }
 
             Random energy = new Random();
             float available = energy.nextFloat()*80;

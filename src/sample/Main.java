@@ -1,33 +1,13 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.application.*;
-import javafx.stage.*;
-import javafx.scene.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 public class Main extends Application {
@@ -57,13 +37,13 @@ public class Main extends Application {
         VBox layout1 = new VBox(20);
 
 
-        scene1 = new Scene(layout1,500,600);
+        scene1 = new Scene(layout1,300,300);
 
         Button button = new Button("Add new car");
         Button rangenButton = new Button("Generate random 100 cars list");
         Button buyingPrice = new Button("present buying price");
         Button sellingPrice = new Button("present Selling price");
-        Button transaction = new Button("Transasction");
+        Button transaction = new Button("Simulation");
         int i=0;
 
 
@@ -89,7 +69,7 @@ public class Main extends Application {
         transaction.setOnAction(e -> {
             try {
 
-                RunTimeResult.magic();
+                RunTimeResult.simulate();
 
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
@@ -99,24 +79,36 @@ public class Main extends Application {
         Button powerDetailsButton = new Button("Graph of Power plants");
         //powerDetailsButton.setOnAction(e-> GraphDisplay.powerInfoGraph());
 
+      //  NewNeuralNetwork.NeuralNetwork();
+
+      //  ScatterPoints.runData();
+
+      // PolynomialCurve.makecurve();
+
+        PatternRecognization.startPatternRecog();
+
+        Button predictionButton = new Button("Prediction");
+        predictionButton.setOnAction(e-> PredictionClass.intiate());
+
         sellingPrice.setOnAction(e-> SettingPrice.sellingPrice());
 
 
         layout1.setAlignment(Pos.CENTER);
 
-        layout1.getChildren().addAll( button,rangenButton,showdatabase,buyingPrice,sellingPrice,transaction);
+        layout1.getChildren().addAll( button,rangenButton,transaction,predictionButton);
 
         StackPane layout2 = new StackPane();
         layout2.getChildren().add(button2);
 
-        scenen2 = new Scene(layout2,650,350);
+        scenen2 = new Scene(layout2,400,350);
 
 
         window.setScene((scene1));
         window.setTitle("scene1");
+       // PredictionClass.intiate();
 
      //   graph();
-        window.show();
+   //     window.show();
 
 
 

@@ -286,8 +286,8 @@ public class RandomGeneration {
 
         window.initModality(Modality.APPLICATION_MODAL);
         //    window.setTitle(title);
-        window.setMinWidth(500);
-        window.setMinHeight(500);
+        window.setMinWidth(400);
+        window.setMinHeight(400);
 
 
         TextField carname = new TextField(""+car.getCarName());
@@ -300,7 +300,7 @@ public class RandomGeneration {
         Label maxBatterylabel = new Label("Critical Battery level");
 
         Label typelabel = new Label();
-        carlabel.setText("give the name");
+        carlabel.setText("User Name");
 
 
         final ToggleGroup group = new ToggleGroup();
@@ -312,8 +312,8 @@ public class RandomGeneration {
         rb2.setToggleGroup(group);
         rb3.setToggleGroup(group);
 
-        Label minPricelabel = new Label("set the min price below to start charge");
-        Label maxPricelabel = new Label("Set the max prices value above which you want to sell");
+        Label minPricelabel = new Label("Give Minimum Price to Charge");
+        Label maxPricelabel = new Label("Give Maximum Price to Discharge");
 
 
         TextField minPrice = new TextField(""+car.getBuyPrice());
@@ -378,6 +378,7 @@ public class RandomGeneration {
         VBox layout7 = new VBox(10);
         HBox hb = new HBox(10);
         HBox hb1 = new HBox(10);
+        HBox hb2 = new HBox(10);
 
         VBox vb1 = new VBox(10);
         VBox vb2 = new VBox(10);
@@ -386,6 +387,8 @@ public class RandomGeneration {
         vb1.setSpacing(20);
 
         vb2.getChildren().addAll(carname,minBattery,maxBattery);
+        hb2.getChildren().addAll(yes,close);
+        hb2.setAlignment(Pos.CENTER);
 
         hb.getChildren().addAll(rb1,rb2,rb3);
         hb1.getChildren().addAll(vb1, vb2);
@@ -400,7 +403,7 @@ public class RandomGeneration {
         layout7.getChildren().addAll(hb1, typelabel, hb);
         layout7.setAlignment(Pos.CENTER);
 
-        layout.getChildren().addAll( layout7, layout5, layout4, yes, close);
+        layout.getChildren().addAll( layout7, layout5, layout4, hb2);
         Scene scene = new Scene(layout);
         window.setTitle("Adding from Seller");
 
