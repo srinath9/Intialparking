@@ -41,10 +41,10 @@ public class NewNeuralNetwork
     public static double mean[][] = new double[7][96];
     public static double std[][] = new double[7][96];
 
-    // Unit erro[weekday][week][slot]rs.
-    private static double erro[][][][] = new double[7][52][96][OUTPUT_NEURONS];
-    private static double errh[][][][] = new double[7][52][96][HIDDEN_NEURONS];
-
+    // Uniterrors.
+    private static double erro[] = new double[OUTPUT_NEURONS];
+    private static double errh[] = new double[HIDDEN_NEURONS];
+    
     private static final int MAX_SAMPLES = 96;
 
     private static double[] predictedVal1 = new double[96];
@@ -273,7 +273,7 @@ public class NewNeuralNetwork
 
     private static void testNetworkTraining()
     {
-            double erro[weekday][week][slot]rper;
+            doubleerrorper;
             System.out.println("\ntestNetworkTraining   :");
             // This function simply tests the training vectors against network.
     //    int sample = 0, weekday = 0;
@@ -287,13 +287,13 @@ public class NewNeuralNetwork
                 for (int j = 0; j < INPUT_NEURONS; j++) {
                     System.out.print(inputs[j] * 4440 + "\t");
                 } // j
-                erro[weekday][week][slot]rper = (trainOutput[i][0] - predictedVal[weekday][week][slot][0]) * 100 / trainOutput[i][0];
+               errorper = (trainOutput[i][0] - predictedVal[weekday][week][slot][0]) * 100 / trainOutput[i][0];
 
                 predictedVal[weekday][week][slot]1[i] = predictedVal[weekday][week][slot][0];
 
                 //  System.out.print("Output: " + maximum(predictedVal[weekday][week][slot]) + "\n");
                 // System.out.println("ip1 :"+inputs[0] + "\t"+ "ip1 :" + inputs[1] + "\t"+"ip2 :" + inputs[2] + "\t"+ "ip3 :" + inputs[3]+"\t predictedVal[weekday][week][slot] out  :  "+trainOutput[i][0]);
-                System.out.println(trainOutput[i][0] * 4440 + "\t " + predictedVal[weekday][week][slot][0] * 4440 + "\t" + erro[weekday][week][slot]rper);
+                System.out.println(trainOutput[i][0] * 4440 + "\t " + predictedVal[weekday][week][slot][0] * 4440 + "\t" +errorper);
                 // i
             }
         }
@@ -332,7 +332,14 @@ public class NewNeuralNetwork
 
 
             String day4 = workingDirectory + File.separator + "src" + '\\' + "sample" + '\\' + "csv_data" +'\\' + csvdata4;
-            br = new BufferedReader(new FileReader(day4));
+            String day1 = workingDirectory + File.separator + "src" + "/" + "sample" + "/" + "csv_data" +"/" + csvdata4;
+
+            try {
+                br = new BufferedReader(new FileReader(day4));
+            }
+            catch (Exception e){
+                br = new BufferedReader(new FileReader(day1));
+            }
 
             weekday=1;
             week=0;
@@ -426,7 +433,7 @@ public class NewNeuralNetwork
                         System.out.println("we got error  more");
                     }
 
-                    System.out.println(inputs[0] + "\t " + inputs[1] + "\t " + inputs[2] + "\t "  + "\t " + target+"\t "+ predictedVal[weekday][week][slot][0]+ "\t  "+ error);
+        //            System.out.println(inputs[0] + "\t " + inputs[1] + "\t " + inputs[2] + "\t "  + "\t " + target+"\t "+ predictedVal[weekday][week][slot][0]+ "\t  "+ error);
                     //        System.out.println(inputs[0] + "\t" + inputs[1] + "\t" + inputs[2] + "\t" + inputs[3] + "\t" + target+"\t"+predictedVal[weekday][week + INPUT_NEURONS][slot][0]);
                  //   System.out.println(predictedVal[weekday][week][slot][0]);
                     // System.out.println(maximum(predictedVal[weekday][week][slot]) + "\t" + maximum(target));
@@ -446,9 +453,9 @@ public class NewNeuralNetwork
         double[] previous = new double[52];
 
         weekday = 4;
-        slot=54;
+    //    slot=54;
 
-        for ( slot =20; slot <55 ; slot++) {
+        for ( slot =0; slot <96 ; slot++) {
             for (week = 0; week < 48; week++) {
                 predict[week] = denormalizeValue(predictedVal[weekday][week][slot][0]);
                 actval[week] = denormalizeValue(testOutput[weekday][week][slot]);
@@ -501,10 +508,10 @@ public class NewNeuralNetwork
             sum = 0.0;
             for(int inp = 0; inp < (INPUT_NEURONS/3); inp++)
             {
-                sum += inputs[inp] * wih[weekday][week][slot][inp][hid];
+                sum += inputs[inp] * wih[inp][hid];
             } // inp
 
-            sum += wih[weekday][week][slot][INPUT_NEURONS/3][hid]; // Add in bias.
+            sum += wih[INPUT_NEURONS/3][hid]; // Add in bias.
             hidden[hid] = sigmoid(sum);
         } // hid
 
@@ -514,10 +521,10 @@ public class NewNeuralNetwork
             sum = 0.0;
             for(int hid = 0; hid < HIDDEN_NEURONS; hid++)
             {
-                sum += hidden[hid] * who[weekday][week][slot][hid][out];
+                sum += hidden[hid] * who[hid][out];
             } // hid
 
-            sum += who[weekday][week][slot][HIDDEN_NEURONS][out]; // Add in bias.
+            sum += who[HIDDEN_NEURONS][out]; // Add in bias.
             predictedVal[weekday][week][slot][out] = sigmoid(sum);
 
         } // out
@@ -529,35 +536,35 @@ public class NewNeuralNetwork
 
     private static void backPropagate()
     {
-        // Calculate the output layer erro[weekday][week][slot]r (step 3 for output cell).
+        // Calculate the output layererror (step 3 for output cell).
 
                 for (int out = 0; out < OUTPUT_NEURONS; out++) {
-                    erro[weekday][week][slot][out] = (target - predictedVal[weekday][week][slot][out]) * sigmoidDerivative(predictedVal[weekday][week][slot][out]);
+                   erro[out] = (target - predictedVal[weekday][week][slot][out]) * sigmoidDerivative(predictedVal[weekday][week][slot][out]);
                 }
 
-                // Calculate the hidden layer erro[weekday][week][slot]r (step 3 for hidden cell).
+                // Calculate the hidden layererror (step 3 for hidden cell).
                 for (int hid = 0; hid < HIDDEN_NEURONS; hid++) {
-                    errh[weekday][week][slot][hid] = 0.0;
+                    errh[hid] = 0.0;
                     for (int out = 0; out < OUTPUT_NEURONS; out++) {
-                        errh[weekday][week][slot][hid] += erro[weekday][week][slot][out] * who[weekday][week][slot][hid][out];
+                        errh[hid] +=erro[out] * who[hid][out];
                     }
-                    errh[weekday][week][slot][hid] *= sigmoidDerivative(hidden[hid]);
+                    errh[hid] *= sigmoidDerivative(hidden[hid]);
                 }
 
                 // Update the weights for the output layer (step 4).
                 for (int out = 0; out < OUTPUT_NEURONS; out++) {
                     for (int hid = 0; hid < HIDDEN_NEURONS; hid++) {
-                        who[weekday][week][slot][hid][out] += (LEARN_RATE * erro[weekday][week][slot][out] * hidden[hid]);
+                        who[hid][out] += (LEARN_RATE *erro[out] * hidden[hid]);
                     } // hid
-                    who[weekday][week][slot][HIDDEN_NEURONS][out] += (LEARN_RATE * erro[weekday][week][slot][out]); // Update the bias.
+                    who[HIDDEN_NEURONS][out] += (LEARN_RATE *erro[out]); // Update the bias.
                 } // out
 
                 // Update the weights for the hidden layer (step 4).
                 for (int hid = 0; hid < HIDDEN_NEURONS; hid++) {
                     for (int inp = 0; inp < INPUT_NEURONS/3; inp++) {
-                        wih[weekday][week][slot][inp][hid] += (LEARN_RATE * errh[weekday][week][slot][hid] * inputs[inp]);
+                        wih[inp][hid] += (LEARN_RATE * errh[hid] * inputs[inp]);
                     } // inp
-                    wih[weekday][week][slot][INPUT_NEURONS/3][hid] += (LEARN_RATE * errh[weekday][week][slot][hid]); // Update the bias.
+                    wih[INPUT_NEURONS/3][hid] += (LEARN_RATE * errh[hid]); // Update the bias.
                 } // hid
 
 
@@ -574,7 +581,7 @@ public class NewNeuralNetwork
                     {
                         for (int hid = 0; hid < HIDDEN_NEURONS; hid++) {
                             // Assign a random weight value between -0.5 and 0.5
-                            wih[weekday][week][slot][inp][hid] = new Random().nextDouble() - 0.5;
+                            wih[inp][hid] = new Random().nextDouble() - 0.5;
                         } // hid
                     } // inp
 
@@ -582,7 +589,7 @@ public class NewNeuralNetwork
                     {
                         for (int out = 0; out < OUTPUT_NEURONS; out++) {
                             // Assign a random weight value between -0.5 and 0.5
-                            who[weekday][week][slot][hid][out] = new Random().nextDouble() - 0.5;
+                            who[hid][out] = new Random().nextDouble() - 0.5;
                         } // out
                     } // hid
                 }
@@ -610,21 +617,20 @@ public class NewNeuralNetwork
 
         String day = "";
 
-        //absoluteFilePath = workingDirectory + System.getProperty("file.separator") + filename;
-        day = workingDirectory + File.separator + "src" + '\\' + "sample" + '\\' + "csv_data" +'\\' + csvdata;
+        day = workingDirectory + File.separator + "src" + "\\" + "sample" + "\\" + "csv_data" +"\\" + csvdata;
+        String day1 = workingDirectory + File.separator + "src" + "/" + "sample" + "/" + "csv_data" +"/" + csvdata;
 
-        //absoluteFilePath = new FileInputStream("input.txt");
-        //System.out.println(absoluteFilePath);
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
 
-
-
         try {
-
-            br = new BufferedReader(new FileReader(day));
-
+            try {
+                br = new BufferedReader(new FileReader(day));
+            }
+            catch (Exception e){
+                br = new BufferedReader(new FileReader(day1));
+            }
             System.out.println("train inpooout");
             while (((line = br.readLine()) != null) ) {
                 //   number += 1;
@@ -647,7 +653,7 @@ public class NewNeuralNetwork
                     }
                     //  System.out.print(price[1]+" ");
                     trainInputs[weekday][week][slot] = normalizeValue(Double.parseDouble(price[6]) );
-                    //   System.out.print(""+slot+" : "+trainInputs[weekday][week][slot] +"\t");
+                    System.out.print(""+slot+" : "+trainInputs[weekday][week][slot] +"\t");
                     slot++;
 
                 } catch (Exception e) {

@@ -79,13 +79,13 @@ public class Main extends Application {
         Button powerDetailsButton = new Button("Graph of Power plants");
         //powerDetailsButton.setOnAction(e-> GraphDisplay.powerInfoGraph());
 
-      //  NewNeuralNetwork.NeuralNetwork();
+        NewNeuralNetwork.NeuralNetwork();
 
       //  ScatterPoints.runData();
 
       // PolynomialCurve.makecurve();
 
-        PatternRecognization.startPatternRecog();
+   //     PatternRecognization.startPatternRecog();
 
         Button predictionButton = new Button("Prediction");
         predictionButton.setOnAction(e-> PredictionClass.intiate());

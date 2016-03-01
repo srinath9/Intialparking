@@ -625,7 +625,7 @@ public class GraphDisplay {
 
             series2.getData().add( new XYChart.Data(week, predictVal[week]));
 
-            series3.getData().add(new XYChart.Data(week, previous[week]));
+        //    series3.getData().add(new XYChart.Data(week, previous[week]));
             //      System.out.print("fitted values \n"+fitted.value(slot)+"\t");
 
         }
